@@ -1,0 +1,121 @@
+
+html{
+    font-size: 14px;
+}
+
+/*HEADER START*/
+.navbar-container .logo-image {
+    height: 70px;
+    margin-top: 4px;
+}
+
+.navbar-container .scns-name {
+    font-size: 18px;
+    color: darkblue;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/*MAIN*/
+
+.lead-section .page-name {
+    font-size: 18px;
+    font-weight: bold;
+    color:#6b6b6b;
+}
+
+/*submit section*/
+.submit .submit-span {
+    color: red;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.submit .submit-span-none {
+    white-space: normal;
+}
+
+.submit .submit-label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.submit .submit-textbox,
+.submit .price-textbox,
+.search-section .submit-textbox{
+    font-size: 14px;
+    border: 1.5px solid #bdbdbd;
+    background: rgba(255,255,255,0);
+    box-shadow: 0 0 1px #bdbdbd inset;
+    padding: 3px 10px;
+    width: 50%;
+}
+
+.submit .submit-dropdownlist {
+    font-size: 14px;
+    border: 1.5px solid #bdbdbd;
+    background: rgba(255,255,255,0);
+    box-shadow: 0 0 1px #bdbdbd inset;
+    padding: 3px 10px;
+    width: 80%;
+}
+
+.submit .submit-textbox:focus,
+.submit .price-textbox:focus,
+.submit .submit-dropdownlist:focus,
+.search-section .submit-textbox:focus {
+    background: rgba(220,220,220,0.3);
+    color: #000;
+    border: 1.5px solid darkgray;
+    box-shadow: none;
+}
+
+.submit .submit-example {
+    font-weight: bold;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.submit .submit-customValidator {
+    font-size: 14px;
+    font-weight: bold;
+    color:red;
+}
+
+/*Button*/
+.btn-danger {
+    background-color: #E84C3D !important;
+    font-size: 16px !important;
+    
+}
+
+.btn-danger:hover {
+    background-color: #c22617 !important;
+}
+
+.save {
+    padding: 10px 30px 10px 43px;
+    background: url(../img/save.png) left 12px top 10px no-repeat #E84C3D;
+}
+
+.btn-success {
+    font-size: 14px !important;
+}
+
+.btn-secondary {
+    font-size: 13px !important;
+}
+
+/*GridView*/
+.container-grid {
+    max-width: 1140px;
+}
+
+.section-gridview .icons {
+    font-size: 25px;
+    color: #c22617;
+    text-decoration: none;
+    text-align: center;
+}
+
+

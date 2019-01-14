@@ -1,0 +1,53 @@
+
+
+
+@media(min-width:576px){
+        
+    
+    
+}
+
+
+@media(min-width:768px){
+
+    .submit .submit-textbox {
+        width: 50%;
+    }
+
+    .submit .price-textbox {
+        width: 40%;
+    }
+
+    .submit .submit-dropdownlist {
+        width: 60%;
+    }
+}
+
+
+@media(min-width:992px){
+    
+    html{
+        font-size: 16px;
+    }
+
+    .submit .submit-dropdownlist {
+        width: 80%;
+    }
+
+
+    .container-grid {
+        max-width:1340px;
+    }
+}
+
+
+
+
+
+@media(min-width:1200px){
+
+
+    
+    
+    
+}
