@@ -5,6 +5,7 @@
         type: 'OK'
     });
 };
+
 function erroralert() {
     swal({
         title: 'Greška prilikom unosa fakture.',

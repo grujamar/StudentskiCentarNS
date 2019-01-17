@@ -16,6 +16,44 @@ html{
     text-transform: uppercase;
 }
 
+
+.navbar-light .navbar-toggler {
+    border-color: #E84C3D;
+}
+
+.navbar-light .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(232,76,61, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+.navbar-nav li {
+    background: #E84C3D;
+    text-align: center;
+    transition: 0.5s linear;
+}
+
+    .navbar-nav li:hover,
+    .navbar-nav li.active {
+        background: #E84C3D;
+    }
+
+    .navbar-nav li a.nav-link {
+        text-transform: uppercase;
+        color: #fff !important;
+        font-family: 'Montserrat', sans-serif;
+        transition: 0.5s linear;
+    }
+
+    .navbar-nav li:hover a.nav-link,
+    .navbar-nav li.active a {
+        color: #fff !important;
+    }
+
+    #main-menu {
+        margin: 0 -15px;
+    }
+
+
+
 /*MAIN*/
 
 .lead-section .page-name {
@@ -107,6 +145,10 @@ html{
 }
 
 /*GridView*/
+.section-gridview {
+    height: 400px;
+}
+
 .container-grid {
     max-width: 1140px;
 }
@@ -118,4 +160,34 @@ html{
     text-align: center;
 }
 
+/*Footer*/
+footer-positioning {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
 
+
+footer .social .fa {
+    width: 48px;
+    height: 48px;
+    line-height: 48px;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    font-size: 28px;
+    transition: 0.5s linear;
+    text-decoration:none;
+}
+
+footer .social .fa:hover {
+    background: #E84C3D;
+    border: 2px solid #E84C3D;
+}
+
+footer a {
+    color: #a53429;
+    text-decoration: none;
+    font-weight:bold;
+}

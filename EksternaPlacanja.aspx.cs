@@ -76,8 +76,7 @@ namespace SCNS
                 args.IsValid = Utils.ValidateFactureNumber(txtfacturenumber.Text, out ErrorMessage);
                 cvfacturenumber.ErrorMessage = ErrorMessage;
                 errLabel.Text = string.Empty;
-                if (!args.IsValid)
-                {
+                if (!args.IsValid){
                     txtfacturenumber.BorderColor = ColorTranslator.FromHtml(SetRed);
                 }else {
                     txtfacturenumber.BorderColor = ColorTranslator.FromHtml(SetGray);
@@ -121,8 +120,7 @@ namespace SCNS
                 args.IsValid = Utils.ValidateOrganisation(ddlorganization.SelectedValue, IDItem, out ErrorMessage);
                 cvorganization.ErrorMessage = ErrorMessage;
                 errLabel2.Text = string.Empty;
-                if (!args.IsValid)
-                {
+                if (!args.IsValid){
                     ddlorganization.BorderColor = ColorTranslator.FromHtml(SetRed);
                 }else {
                     ddlorganization.BorderColor = ColorTranslator.FromHtml(SetGray);

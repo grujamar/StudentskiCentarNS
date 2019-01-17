@@ -234,7 +234,7 @@ namespace SCNS
             {
                 if (Page.IsValid)
                 {
-                    int Operater = 11111;
+                    //int Operater = 11111;
 
 
                 }
