@@ -31,26 +31,26 @@ html{
     transition: 0.5s linear;
 }
 
-    .navbar-nav li:hover,
-    .navbar-nav li.active {
-        background: #E84C3D;
-    }
+.navbar-nav li:hover,
+.navbar-nav li.active {
+    background: #e07167;
+}
 
-    .navbar-nav li a.nav-link {
-        text-transform: uppercase;
-        color: #fff !important;
-        font-family: 'Montserrat', sans-serif;
-        transition: 0.5s linear;
-    }
+.navbar-nav li a.nav-link {
+    text-transform: uppercase;
+    color: #fff !important;
+    font-family: 'Montserrat', sans-serif;
+    transition: 0.5s linear;
+}
 
-    .navbar-nav li:hover a.nav-link,
-    .navbar-nav li.active a {
-        color: #fff !important;
-    }
+.navbar-nav li:hover a.nav-link,
+.navbar-nav li.active a {
+    color: #fff !important;
+}
 
-    #main-menu {
-        margin: 0 -15px;
-    }
+#main-menu {
+    margin: 0 -15px;
+}
 
 
 
@@ -146,7 +146,7 @@ html{
 
 /*GridView*/
 .section-gridview {
-    height: 400px;
+    height: 600px;
 }
 
 .container-grid {
@@ -159,6 +159,12 @@ html{
     text-decoration: none;
     text-align: center;
 }
+
+#GridView1 tr:hover {
+    background: #E84C3D; /*svaki red u body-u, hover sa nekom bojom, kada se prelazi*/
+    color: #fff;
+}
+
 
 /*Footer*/
 footer-positioning {

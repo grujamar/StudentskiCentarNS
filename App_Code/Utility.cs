@@ -58,6 +58,27 @@ public class Utility
         }
     }
 
+    public void upisiBlagajnicu(string blagajnica)
+    {
+        try
+        {
+            SqlConnection objConn = new SqlConnection(scnsconnectionstring);
+            SqlCommand objCmd = new SqlCommand(@"insert into blVMoguciBlagajniciZaZaduzivanje (PunoIme) values (@blagajnica)", objConn);
+            objCmd.CommandType = System.Data.CommandType.Text;
+
+            objCmd.Parameters.AddWithValue("@blagajnica", blagajnica);
+
+            objConn.Open();
+            objCmd.ExecuteNonQuery();
+            objConn.Close();
+        }
+        catch (Exception ex)
+        {
+            log.Error("Error while inserting PunoIme value. " + ex.Message);
+            throw new Exception("Error while inserting PunoIme value. " + ex.Message);
+        }
+    }
+
     public List<string> proveriOrganizaciju()
     {
         try
@@ -65,6 +86,45 @@ public class Utility
             List<string> responses = new List<string>();
 
             string upit = @"SELECT  NazivOrganizacije FROM dbo.blOrganizacija";
+
+            using (SqlConnection objConn = new SqlConnection(scnsconnectionstring))
+            {
+                using (SqlCommand objCmd = new SqlCommand(upit, objConn))
+                {
+                    try
+                    {
+                        objCmd.CommandType = System.Data.CommandType.Text;
+                        objConn.Open();
+                        SqlDataReader reader = objCmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            responses.Add(reader.GetSqlString(0).ToString());
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error("Error: " + ex.Message);
+                        throw new Exception("Error: " + ex.Message);
+                    }
+                }
+            }
+
+            return responses;
+        }
+        catch (Exception ex)
+        {
+            log.Error("Error: " + ex.Message);
+            throw new Exception("Error: " + ex.Message);
+        }
+    }
+
+    public List<string> proveriBlagajnicu()
+    {
+        try
+        {
+            List<string> responses = new List<string>();
+
+            string upit = @"SELECT  PunoIme FROM dbo.blVMoguciBlagajniciZaZaduzivanje";
 
             using (SqlConnection objConn = new SqlConnection(scnsconnectionstring))
             {

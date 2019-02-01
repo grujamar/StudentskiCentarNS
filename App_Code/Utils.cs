@@ -158,6 +158,24 @@ public static class Utils
         return returnValue;
     }
 
+    public static bool ValidateCashier(string SelectedValue, string IDItem, out string ErrorMessage)
+    {
+        bool returnValue = true;
+        ErrorMessage = string.Empty;
+
+        if (SelectedValue == IDItem)
+        {
+            ErrorMessage = "Blagajnica je obavezno polje. ";
+            returnValue = false;
+        }
+        else
+        {
+            returnValue = true;
+        }
+
+        return returnValue;
+    }
+
     public static bool ValidateOrganizationTxt(string OrganizationTxt, out string ErrorMessage)
     {
         bool returnValue = true;

@@ -255,7 +255,7 @@
                         <ContentTemplate>
                             <fieldset>
                                 <div class="table-responsive">
-                                    <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowHeaderWhenEmpty="True" Width="100%" DataKeyNames="IDEksternoPlacanje" OnPageIndexChanging="GridView1_PageIndexChanging" OnRowEditing="GridView1_RowEditing" OnRowDeleting="GridView1_RowDeleting" style="margin-top: 0px">
+                                    <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowHeaderWhenEmpty="True" Width="100%" DataKeyNames="IDEksternoPlacanje" OnPageIndexChanging="GridView1_PageIndexChanging" OnRowEditing="GridView1_RowEditing" OnRowDeleting="GridView1_RowDeleting" style="margin-top: 0px" RowStyle-CssClass="rowHover">
                                         <Columns>
                                             <asp:BoundField DataField="IDEksternoPlacanje" HeaderText="IDEksternoPlacanje" SortExpression="IDEksternoPlacanje" Visible="false"/>
                                             <asp:BoundField DataField="TipPlacanja" HeaderText="TipPlacanja" SortExpression="TipPlacanja" readonly="true"/>

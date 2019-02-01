@@ -101,10 +101,10 @@
                                         <asp:Label id="spanTypeOfService" runat="server" CssClass="submit-span">*</asp:Label><asp:Label id="lblTypeOfService" runat="server" CssClass="submit-label ml-2">Tip usluge:</asp:Label> 
                                     </div>
                                     <div class="col-12 col-lg-5">
-                                        <asp:DropDownList ID="ddlTypeOfService" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="TipUsluge" DataValueField="IDTipUsluge" OnSelectedIndexChanged="ddlTypeOfService_SelectedIndexChanged" TabIndex="1" DataSourceID="dsTipUsluge">
+                                        <asp:DropDownList ID="ddlTypeOfService" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="TipStavkeBlagajnickogIzvestaja" DataValueField="IDTipStavkeBlagajnickogIzvestaja" OnSelectedIndexChanged="ddlTypeOfService_SelectedIndexChanged" TabIndex="1" DataSourceID="dsTipUsluge">
                                         <asp:ListItem Selected="True" Value="0">--Izaberite--</asp:ListItem>
                                         </asp:DropDownList>                   
-                                        <asp:SqlDataSource ID="dsTipUsluge" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT [IDTipUsluge], [TipUsluge] FROM [blTipUsluge]"></asp:SqlDataSource>
+                                        <asp:SqlDataSource ID="dsTipUsluge" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT IDTipStavkeBlagajnickogIzvestaja, TipStavkeBlagajnickogIzvestaja FROM blVMoguceStavkeZaZaduzivanje"></asp:SqlDataSource>
                                     </div>
                                     <div class="col-12 col-lg-5 mb-3 mb-lg-0">
                                         <asp:CustomValidator runat="server" id="cvTypeOfService" controltovalidate="ddlTypeOfService" errormessage="" OnServerValidate="CvTypeOfService_ServerValidate" CssClass="submit-customValidator" Display="Dynamic" ForeColor="Red" ValidateEmptyText="true"/>
@@ -122,43 +122,14 @@
                                         <asp:Label id="spanCashier" runat="server" CssClass="submit-span">*</asp:Label><asp:Label id="lblCashier" runat="server" CssClass="submit-label ml-2">Blagajnica:</asp:Label> 
                                     </div>
                                     <div class="col-12 col-lg-5">
-                                        <asp:DropDownList ID="ddlCashier" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="Obrok" DataValueField="IDObrok" OnSelectedIndexChanged="ddlCashier_SelectedIndexChanged" DataSourceID="dsBlagajnice" TabIndex="2">
+                                        <asp:DropDownList ID="ddlCashier" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="PunoIme" DataValueField="IDOsoba" OnSelectedIndexChanged="ddlCashier_SelectedIndexChanged" DataSourceID="dsBlagajnice" TabIndex="2">
                                         <asp:ListItem Selected="True" Value="0">--Izaberite--</asp:ListItem>
                                         </asp:DropDownList>                      
-                                        <asp:SqlDataSource ID="dsBlagajnice" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT [IDObrok], [Obrok] FROM [pisObrok]"></asp:SqlDataSource>
+                                        <asp:SqlDataSource ID="dsBlagajnice" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT IDOsoba, PunoIme FROM blVMoguciBlagajniciZaZaduzivanje"></asp:SqlDataSource>
                                     </div>
                                     <div class="col-12 col-lg-5 mb-3 mb-lg-0">
                                         <asp:CustomValidator runat="server" id="cvCashier" controltovalidate="ddlCashier" errormessage="" OnServerValidate="CvCashier_ServerValidate" CssClass="submit-customValidator" Display="Dynamic" ForeColor="Red" ValidateEmptyText="true"/>
                                     </div><!--div ddlCashier end-->
-                                </div>
-                            </fieldset>
-                        </ContentTemplate>
-                    </asp:UpdatePanel>
-                    <asp:UpdatePanel id="UpdatePanel3" runat="server">
-                        <ContentTemplate>
-                            <fieldset>
-                                <div class="row" runat="server">
-                                    <!--div addCashier start-->
-                                    <div class="col-12 col-lg-2 mb-1 mb-md-4">                                    
-                                    </div>
-                                    <div class="col-12 col-lg-5 mb-3 mb-md-4">
-                                        <asp:Button ID="btnAddCashier" runat="server" Text="Dodaj blagajnicu" CssClass="btn btn-success" OnClick="btnAddCashier_Click" TabIndex="2"/>
-                                    </div>
-                                    <div class="col-12 col-lg-5 mb-3 mb-lg-0">
-                                    </div><!--div addCashier end-->
-                                </div>
-                                <div class="row" runat="server" id="myDiv1">
-                                    <!--div addCashier TextBox start-->
-                                    <div class="col-12 col-lg-2 mb-1 mb-md-4">                                    
-                                    </div>
-                                    <div class="col-12 col-lg-5 mb-3 mb-md-4">
-                                        <asp:TextBox ID="txtCashier" runat="server" CssClass="submit-dropdownlist" maxlength="30"></asp:TextBox>
-                                        <asp:Button ID="btnAdd" runat="server" Text=" + Dodaj" CssClass="btn btn-secondary" OnClick="btnAdd_Click"/>
-                                    </div>
-                                    <div class="col-12 col-lg-5 mb-3 mb-lg-0">
-                                        <asp:Label ID="errLabel3" runat="server" CssClass="submit-customValidator"></asp:Label>
-                                        <asp:CustomValidator ID="cvAdd" runat="server" ErrorMessage="" controltovalidate="txtCashier" Display="Dynamic" ForeColor="Red" CssClass="submit-customValidator" ValidateEmptyText="true" OnServerValidate="CvAdd_ServerValidate"></asp:CustomValidator>
-                                    </div><!--div addCashier TextBox end-->
                                 </div>
                             </fieldset>
                         </ContentTemplate>
@@ -179,6 +150,18 @@
                                         <asp:Label ID="errLabel1" runat="server" CssClass="submit-customValidator"></asp:Label>
                                         <asp:CustomValidator ID="cvprice" runat="server" ErrorMessage="" controltovalidate="txtprice" Display="Dynamic" ForeColor="Red" CssClass="submit-customValidator" ValidateEmptyText="true" OnServerValidate="Cvprice_ServerValidate"></asp:CustomValidator>
                                     </div><!--div price end-->
+                                    <!--div date start-->
+                                    <div class="col-12 col-lg-2 mb-1 mb-md-4">
+                                        <asp:Label id="spandate" runat="server" CssClass="submit-span">*</asp:Label><asp:Label id="lbldate" runat="server" CssClass="submit-label ml-2">Datum:</asp:Label>
+                                    </div>
+                                    <div class="col-12 col-lg-5">
+                                        <asp:TextBox ID="txtdate" runat="server" CssClass="price-textbox" maxlength="10" TabIndex="6" ontextchanged="txtdate_TextChanged" AutoPostBack="true"></asp:TextBox>
+                                        <asp:Label id="dateexample" runat="server" CssClass="submit-example ml-2">Primer: 21.09.2010</asp:Label>
+                                    </div>
+                                    <div class="col-12 col-lg-5 mb-3 mb-lg-0">
+                                        <asp:Label ID="errLabel2" runat="server" CssClass="submit-customValidator"></asp:Label>
+                                        <asp:CustomValidator ID="cvdate" runat="server" ErrorMessage="" controltovalidate="txtdate" Display="Dynamic" ForeColor="Red" CssClass="submit-customValidator" ValidateEmptyText="true" OnServerValidate="Cvdate_ServerValidate"></asp:CustomValidator>
+                                    </div><!--div date end-->
                                     <!--div button start-->
                                     <div class="col-12 col-md-2">
                                         <article class="py-3">

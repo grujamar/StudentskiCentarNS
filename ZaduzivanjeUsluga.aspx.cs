@@ -27,12 +27,13 @@ namespace SCNS
                 Response.Redirect("GreskaBaza.aspx", false); // this will tell .NET framework not to stop the execution of the current thread and hence the error will be resolved.
             }
             AvoidCashing();
+            ShowDatepicker();
 
             if (!Page.IsPostBack)
             {
                 SetBordersGray();
                 //BindGridFinal(utility);
-                myDiv1.Visible = false;
+                //myDiv1.Visible = false;
                 myDiv2.Visible = true;
                 //myDiv3.Visible = false;
                 CustomValidatorAction(true);
@@ -47,11 +48,19 @@ namespace SCNS
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
         }
 
+        protected void ShowDatepicker()
+        {
+            //call function pickdate() every time after PostBack in ASP.Net
+            ScriptManager.RegisterStartupScript(this, GetType(), "", "pickdate();", true);
+            //Avoid: jQuery DatePicker TextBox selected value Lost after PostBack in ASP.Net
+            txtdate.Text = Request.Form[txtdate.UniqueID];
+        }
+
         protected void btnAddCashier_Click(object sender, EventArgs e)
         {
             CustomValidatorActionAll(false);
             SetBordersGray();
-            myDiv1.Visible = true;
+            //myDiv1.Visible = true;
             CustomValidatorActionAll(true);
         }
 
@@ -60,7 +69,7 @@ namespace SCNS
             cvTypeOfService.Enabled = action;
             cvCashier.Enabled = action;
             cvprice.Enabled = action;
-            cvAdd.Enabled = action;
+            //cvAdd.Enabled = action;
         }
 
         protected void CustomValidatorAction(Boolean action)
@@ -68,7 +77,7 @@ namespace SCNS
             cvTypeOfService.Enabled = action;
             cvCashier.Enabled = action;
             cvprice.Enabled = action;
-            cvAdd.Enabled = !action;
+            //cvAdd.Enabled = !action;
         }
 
         protected void SetBordersGray()
@@ -132,7 +141,7 @@ namespace SCNS
                 args.IsValid = false;
             }
         }
-
+        /*
         protected void btnAdd_Click(object sender, EventArgs e)
         {
             try
@@ -168,14 +177,14 @@ namespace SCNS
                 ScriptManager.RegisterStartupScript(this, GetType(), "erroralert", "erroralert();", true);
             }
         }
-
+        
         protected bool CheckIfFullNameExist(Utility utility, string Cashier)
         {
             bool returnValue = false;
             try
             {
                 List<string> CashierNameList = new List<string>();
-                //CashierNameList = utility.proveriOrganizaciju();
+                CashierNameList = utility.proveriBlagajnicu();
 
                 foreach (var CashierName in CashierNameList)
                 {
@@ -196,7 +205,7 @@ namespace SCNS
         {
             try
             {
-                //utility.upisiOrganizaciju(Cashier);
+                utility.upisiBlagajnicu(Cashier);
                 txtCashier.Text = string.Empty;
             }
             catch (Exception ex)
@@ -204,7 +213,7 @@ namespace SCNS
                 throw new Exception("Error while importing value in database. " + ex.Message);
             }
         }
-
+        
         protected void CvAdd_ServerValidate(object source, ServerValidateEventArgs args)
         {
             try
@@ -227,6 +236,7 @@ namespace SCNS
                 args.IsValid = false;
             }
         }
+        */
 
         protected void BtnSubmit_Click(object sender, EventArgs e)
         {
@@ -333,7 +343,130 @@ namespace SCNS
 
         protected void CvCashier_ServerValidate(object source, ServerValidateEventArgs args)
         {
+            try
+            {
+                string ErrorMessage = string.Empty;
+                string IDItem = "0";
 
+                args.IsValid = Utils.ValidateCashier(ddlCashier.SelectedValue, IDItem, out ErrorMessage);
+                cvCashier.ErrorMessage = ErrorMessage;
+                if (!args.IsValid)
+                {
+                    ddlCashier.BorderColor = ColorTranslator.FromHtml(SetRed);
+                }
+                else
+                {
+                    ddlCashier.BorderColor = ColorTranslator.FromHtml(SetGray);
+                }
+            }
+            catch (Exception)
+            {
+                cvCashier.ErrorMessage = string.Empty;
+                args.IsValid = false;
+            }
+        }
+
+        protected void Cvdate_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            try
+            {
+                if (txtdate.Text != string.Empty)
+                {
+                    DateTime datum = DateTime.ParseExact(txtdate.Text, "dd.MM.yyyy", null);
+                    log.Debug("Datum je: " + datum);
+                    string ErrorMessage1 = string.Empty;
+
+                    args.IsValid = Utils.ValidateDate(datum, out ErrorMessage1);
+                    cvdate.ErrorMessage = ErrorMessage1;
+                    if (!args.IsValid)
+                    {
+                        txtdate.BorderColor = ColorTranslator.FromHtml(SetRed);
+                    }
+                    else
+                    {
+                        txtdate.BorderColor = ColorTranslator.FromHtml(SetGray);
+                    }
+                }
+                else
+                {
+                    if (txtdate.Text == string.Empty)
+                    {
+                        cvdate.ErrorMessage = "Datum je obavezno polje. ";
+                        txtdate.BorderColor = ColorTranslator.FromHtml(SetRed);
+                        args.IsValid = false;
+                    }
+                    else
+                    {
+                        txtdate.BorderColor = ColorTranslator.FromHtml(SetGray);
+                        args.IsValid = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Greska prilikom validacije cvdate. " + ex.Message);
+                txtdate.Text = string.Empty;
+                cvdate.ErrorMessage = "Datum je u pogrešnom formatu. ";
+                txtdate.BorderColor = ColorTranslator.FromHtml(SetRed);
+                args.IsValid = false;
+            }
+        }
+
+        protected void txtdate_TextChanged(object sender, EventArgs e)
+        {
+            CheckIfChannelHasChanged2();
+        }
+
+        private void CheckIfChannelHasChanged2()
+        {
+            try
+            {
+                bool ReturnValidation = false;
+
+                if (txtdate.Text != string.Empty)
+                {
+                    DateTime datum = DateTime.ParseExact(txtdate.Text, "dd.MM.yyyy", null);
+                    log.Debug("Datum je: " + datum);
+                    string ErrorMessage1 = string.Empty;
+
+                    ReturnValidation = Utils.ValidateDate(datum, out ErrorMessage1);
+                    errLabel2.Text = ErrorMessage1;
+                    if (!ReturnValidation)
+                    {
+                        txtdate.BorderColor = ColorTranslator.FromHtml(SetRed);
+                        Session["Usluge-event_controle"] = txtdate;
+                    }
+                    else
+                    {
+                        txtdate.BorderColor = ColorTranslator.FromHtml(SetGray);
+                        //Session["Usluge-event_controle"] = txtdescription;
+                    }
+                }
+                else
+                {
+                    if (txtdate.Text == string.Empty)
+                    {
+                        errLabel2.Text = "Datum je obavezno polje. ";
+                        txtdate.BorderColor = ColorTranslator.FromHtml(SetRed);
+                        Session["Usluge-event_controle"] = txtdate;
+                    }
+                    else
+                    {
+                        txtdate.BorderColor = ColorTranslator.FromHtml(SetGray);
+                        //Session["Usluge-event_controle"] = txtdescription;
+                    }
+                }
+                SetFocusOnTextbox();
+            }
+            catch (Exception ex)
+            {
+                log.Error("Greska prilikom validacije txtdate. " + ex.Message);
+                txtdate.Text = string.Empty;
+                errLabel2.Text = "Datum je u pogrešnom formatu. ";
+                txtdate.BorderColor = ColorTranslator.FromHtml(SetRed);
+                Session["Usluge-event_controle"] = txtdate;
+                SetFocusOnTextbox();
+            }
         }
     }
 }
