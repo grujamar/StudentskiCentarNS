@@ -186,7 +186,7 @@
                                         <asp:Label id="spanprice" runat="server" CssClass="submit-span">*</asp:Label><asp:Label id="lblprice" runat="server" CssClass="submit-label ml-2">Iznos:</asp:Label>
                                     </div>
                                     <div class="col-12 col-lg-5">
-                                        <asp:TextBox ID="txtprice" runat="server" CssClass="price-textbox" maxlength="10" TabIndex="5" ontextchanged="txtprice_TextChanged" AutoPostBack="true"></asp:TextBox>
+                                        <asp:TextBox ID="txtprice" runat="server" CssClass="price-textbox" maxlength="8" TabIndex="5" ontextchanged="txtprice_TextChanged" AutoPostBack="true"></asp:TextBox>
                                         <asp:Label id="priceexample" runat="server" CssClass="submit-example ml-2">Primer: 3.000 din</asp:Label>
                                     </div>
                                     <div class="col-12 col-lg-5 mb-3 mb-lg-0">
@@ -243,7 +243,7 @@
                         </div>
                         <div class="col-12 col-md-7 mb-1 my-3 text-center text-md-left">
                             <asp:Button ID="btnSearch1" runat="server" Text="Pretraži BrojPlaćanja" CssClass="btn btn-danger" OnClick="btnSearch1_Click"/>
-                             <asp:Button ID="btnBack" runat="server" Text="Nazad" CssClass="btn" OnClick="btnBack_Click"/>
+                            <asp:Button ID="btnBack" runat="server" Text="Nazad" CssClass="btn" OnClick="btnBack_Click"/>
                         </div>
                     </div>
                 </div>
@@ -258,14 +258,14 @@
                                     <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowHeaderWhenEmpty="True" Width="100%" DataKeyNames="IDEksternoPlacanje" OnPageIndexChanging="GridView1_PageIndexChanging" OnRowEditing="GridView1_RowEditing" OnRowDeleting="GridView1_RowDeleting" style="margin-top: 0px" RowStyle-CssClass="rowHover">
                                         <Columns>
                                             <asp:BoundField DataField="IDEksternoPlacanje" HeaderText="IDEksternoPlacanje" SortExpression="IDEksternoPlacanje" Visible="false"/>
-                                            <asp:BoundField DataField="TipPlacanja" HeaderText="TipPlacanja" SortExpression="TipPlacanja" readonly="true"/>
-                                            <asp:BoundField DataField="NazivOrganizacije" HeaderText="NazivOrganizacije" SortExpression="NazivOrganizacije" readonly="true"/>
-                                            <asp:BoundField DataField="BrojPlacanja" HeaderText="BrojPlacanja" SortExpression="BrojPlacanja" />
+                                            <asp:BoundField DataField="TipPlacanja" HeaderText="Tip plaćanja" SortExpression="TipPlacanja" readonly="true"/>
+                                            <asp:BoundField DataField="NazivOrganizacije" HeaderText="Naziv organizacije" SortExpression="NazivOrganizacije" readonly="true"/>
+                                            <asp:BoundField DataField="BrojPlacanja" HeaderText="Broj plaćanja" SortExpression="BrojPlacanja" />
                                             <asp:BoundField DataField="Iznos" HeaderText="Iznos" SortExpression="Iznos" />
-                                            <asp:BoundField DataField="DatumPlacanja" HeaderText="DatumPlacanja" SortExpression="DatumPlacanja" DataFormatString="{0:yyyy-MM-dd}"/>
+                                            <asp:BoundField DataField="DatumPlacanja" HeaderText="Datum plaćanja" SortExpression="DatumPlacanja" DataFormatString="{0:yyyy-MM-dd}"/>
                                             <asp:BoundField DataField="Opis" HeaderText="Opis" SortExpression="Opis" />
                                             <asp:BoundField DataField="Operater" HeaderText="Operater" SortExpression="Operater" readonly="true"/>
-                                            <asp:BoundField DataField="Ponisteno" HeaderText="Ponisteno" SortExpression="Ponisteno" readonly="true"/>
+                                            <asp:BoundField DataField="Ponisteno" HeaderText="Poništeno" SortExpression="Ponisteno" readonly="true"/>
                                             <asp:TemplateField HeaderText="Promeni">
                                                 <ItemTemplate>
                                                     <asp:LinkButton Text="" runat="server" CssClass="fa fa-pencil-square-o icons" CommandName="Edit" />

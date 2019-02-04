@@ -89,7 +89,8 @@ html{
     width: 50%;
 }
 
-.submit .submit-dropdownlist {
+.submit .submit-dropdownlist,
+.search-section .submit-dropdownlist{
     font-size: 14px;
     border: 1.5px solid #bdbdbd;
     background: rgba(255,255,255,0);
@@ -101,7 +102,8 @@ html{
 .submit .submit-textbox:focus,
 .submit .price-textbox:focus,
 .submit .submit-dropdownlist:focus,
-.search-section .submit-textbox:focus {
+.search-section .submit-textbox:focus,
+.search-section .submit-dropdownlist:focus {
     background: rgba(220,220,220,0.3);
     color: #000;
     border: 1.5px solid darkgray;

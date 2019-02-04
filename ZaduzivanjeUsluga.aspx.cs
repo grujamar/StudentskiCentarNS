@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -32,11 +33,11 @@ namespace SCNS
             if (!Page.IsPostBack)
             {
                 SetBordersGray();
-                //BindGridFinal(utility);
+                utility.BindGridViewZaduzenja(GridView1);
                 //myDiv1.Visible = false;
                 myDiv2.Visible = true;
-                //myDiv3.Visible = false;
-                CustomValidatorAction(true);
+                myDiv3.Visible = false;
+                CustomValidatorActionAll(true);
 
                 log.Info("Aplication successfully start. ");
             }
@@ -69,15 +70,7 @@ namespace SCNS
             cvTypeOfService.Enabled = action;
             cvCashier.Enabled = action;
             cvprice.Enabled = action;
-            //cvAdd.Enabled = action;
-        }
-
-        protected void CustomValidatorAction(Boolean action)
-        {
-            cvTypeOfService.Enabled = action;
-            cvCashier.Enabled = action;
-            cvprice.Enabled = action;
-            //cvAdd.Enabled = !action;
+            cvdate.Enabled = action;
         }
 
         protected void SetBordersGray()
@@ -85,6 +78,7 @@ namespace SCNS
             txtprice.BorderColor = ColorTranslator.FromHtml(SetGray);
             ddlTypeOfService.BorderColor = ColorTranslator.FromHtml(SetGray);
             ddlCashier.BorderColor = ColorTranslator.FromHtml(SetGray);
+            txtdate.BorderColor = ColorTranslator.FromHtml(SetGray);
         }
 
         protected void txtprice_TextChanged(object sender, EventArgs e)
@@ -107,7 +101,7 @@ namespace SCNS
                 else
                 {
                     txtprice.BorderColor = ColorTranslator.FromHtml(SetGray);
-                    //Session["Usluge-event_controle"] = txtdate;
+                    Session["Usluge-event_controle"] = txtdate;
                 }
                 SetFocusOnTextbox();
             }
@@ -141,102 +135,6 @@ namespace SCNS
                 args.IsValid = false;
             }
         }
-        /*
-        protected void btnAdd_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                CustomValidatorActionAll(false);
-
-                if (txtCashier.Text != string.Empty)
-                {
-                    Utility utility = new Utility();
-                    if (CheckIfFullNameExist(utility, txtCashier.Text))
-                    {
-                        errLabel3.Text = "Blagajnica sa tim imenom već postoji. ";
-                    }
-                    else
-                    {
-                        ImportValuesInDatabase(utility, txtCashier.Text);
-                        ddlCashier.Items.Clear();
-                        ddlCashier.Items.Insert(0, new ListItem("--Izaberite--", "0"));
-                        ddlCashier.DataBind();
-                        errLabel3.Text = string.Empty;
-                    }                
-                }
-                else
-                {
-                    errLabel3.Text = string.Empty;
-                }
-                CustomValidatorAction(true);
-                SetBordersGray();
-            }
-            catch (Exception ex)
-            {
-                log.Error("AddCashier error. " + ex.Message);
-                ScriptManager.RegisterStartupScript(this, GetType(), "erroralert", "erroralert();", true);
-            }
-        }
-        
-        protected bool CheckIfFullNameExist(Utility utility, string Cashier)
-        {
-            bool returnValue = false;
-            try
-            {
-                List<string> CashierNameList = new List<string>();
-                CashierNameList = utility.proveriBlagajnicu();
-
-                foreach (var CashierName in CashierNameList)
-                {
-                    if (CashierName == Cashier)
-                    {
-                        returnValue = true;
-                    }
-                }
-                return returnValue;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error while checking if Cashier name exist. " + ex.Message);
-            }
-        }
-
-        protected void ImportValuesInDatabase(Utility utility, string Cashier)
-        {
-            try
-            {
-                utility.upisiBlagajnicu(Cashier);
-                txtCashier.Text = string.Empty;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error while importing value in database. " + ex.Message);
-            }
-        }
-        
-        protected void CvAdd_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            try
-            {
-                string ErrorMessage = string.Empty;
-                //args.IsValid = Utils.ValidateOrganizationTxt(txtorganization.Text, out ErrorMessage);
-                cvAdd.ErrorMessage = ErrorMessage;
-                if (!args.IsValid)
-                {
-                    txtCashier.BorderColor = ColorTranslator.FromHtml(SetRed);
-                }
-                else
-                {
-                    txtCashier.BorderColor = ColorTranslator.FromHtml(SetGray);
-                }
-            }
-            catch (Exception)
-            {
-                cvAdd.ErrorMessage = string.Empty;
-                args.IsValid = false;
-            }
-        }
-        */
 
         protected void BtnSubmit_Click(object sender, EventArgs e)
         {
@@ -244,9 +142,18 @@ namespace SCNS
             {
                 if (Page.IsValid)
                 {
-                    //int Operater = 11111;
+                    int Operater = 11111;
 
-
+                    string FinalDate = string.Empty;
+                    string FormatDateTime = "dd.mm.yyyy";
+                    string FormatToString = "yyyy-mm-dd";
+                    parceDateTime(txtdate.Text, FormatDateTime, FormatToString, out FinalDate);
+                    Utility utility = new Utility();
+                    log.Debug("Fields to import: " + ddlTypeOfService.SelectedItem + " " + ddlCashier.SelectedItem + " " + txtprice.Text + " " + FinalDate + " " + Operater);
+                    ImportFinishedValuesInDatabase(utility, Convert.ToInt32(ddlTypeOfService.SelectedValue), Convert.ToInt32(ddlCashier.SelectedValue), Convert.ToDecimal(txtprice.Text), FinalDate, Operater);
+                    utility.BindGridViewZaduzenja(GridView1);
+                    errLabel1.Text = string.Empty;
+                    errLabel2.Text = string.Empty;
                 }
                 else if (!Page.IsValid)
                 {
@@ -258,6 +165,32 @@ namespace SCNS
                 log.Error("Button submit error. " + ex.Message);
                 ScriptManager.RegisterStartupScript(this, GetType(), "erroralert", "erroralert();", true);
             }
+        }
+
+        protected void ImportFinishedValuesInDatabase(Utility utility, int TypeOfServiceSelectedValue, int CashierSelectedValue, decimal Price, string Date, int Operater)
+        {
+            try
+            {
+                utility.upisiZaduzenje(TypeOfServiceSelectedValue, CashierSelectedValue, Price, Date, Operater);
+                ddlTypeOfService.SelectedValue = "0";
+                ddlCashier.SelectedValue = "0";
+                txtprice.Text = string.Empty;
+                txtdate.Text = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while importing All values in database. " + ex.Message);
+            }
+        }
+
+        protected void parceDateTime(string dateTime, string FormatDateTime, string FormatToString, out string dateTimeFinal)
+        {
+            dateTimeFinal = string.Empty;
+            DateTime FinalDate1 = DateTime.ParseExact(dateTime, FormatDateTime, CultureInfo.InvariantCulture);
+            string FinalDate = FinalDate1.ToString(FormatToString);
+            log.Debug("FinalDate to import: " + FinalDate);
+
+            dateTimeFinal = FinalDate;
         }
 
         public void SetFocusOnTextbox()
@@ -466,6 +399,108 @@ namespace SCNS
                 txtdate.BorderColor = ColorTranslator.FromHtml(SetRed);
                 Session["Usluge-event_controle"] = txtdate;
                 SetFocusOnTextbox();
+            }
+        }
+
+        protected void GridView1_PageIndexChanging(object sender, System.Web.UI.WebControls.GridViewPageEventArgs e)
+        {
+            Utility utility = new Utility();
+            // GRIDVIEW PAGING.
+            GridView1.PageIndex = e.NewPageIndex;
+            utility.BindGridViewZaduzenja(GridView1);
+        }
+
+        protected void GridView1_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            SetBordersGray();
+            Utility utility = new Utility();
+            GridView1.EditIndex = e.NewEditIndex;
+            utility.BindGridViewZaduzenja(GridView1);
+        }
+
+        protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            try
+            {
+                CustomValidatorActionAll(false);
+                SetBordersGray();
+                Utility utility = new Utility();
+                int row = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Value.ToString());
+                utility.stornirajRed(row);
+                log.Debug("Row with ID " + row + " has annulled column. ");
+                BindGridFinal(utility);
+                CustomValidatorActionAll(true);
+            }
+            catch (Exception ex)
+            {
+                log.Error("RowDeleting error. " + ex.Message);
+                ScriptManager.RegisterStartupScript(this, GetType(), "erroralert", "erroralert();", true);
+                CustomValidatorActionAll(true);
+            }
+        }
+
+        protected void btnBack_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Response.Redirect("ZaduzivanjeUsluga.aspx", false);
+            }
+            catch (Exception ex)
+            {
+                log.Error("btnBack error. " + ex.Message);
+                ScriptManager.RegisterStartupScript(this, GetType(), "erroralert", "erroralert();", true);
+            }
+        }
+
+        protected void btnSearch1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Utility utility = new Utility();
+                BindGridFinal(utility);
+            }
+            catch (Exception ex)
+            {
+                log.Error("btnSearch1 error. " + ex.Message);
+                ScriptManager.RegisterStartupScript(this, GetType(), "erroralertSearch", "erroralertSearch();", true);
+            }
+        }
+
+        protected void BindGridFinal(Utility utility)
+        {
+            string SelectedValue = ddlCashier1.SelectedItem.Text;
+            if (SelectedValue != "--Izaberite--")
+            {
+                utility.BindSearchingGridViewZaduzenja(GridView1, SelectedValue);
+            }
+            else
+            {
+                utility.BindGridViewZaduzenja(GridView1);
+            }
+        }
+
+        protected void ddlCashier1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int SelectedValue = Convert.ToInt32(ddlCashier1.SelectedValue);
+            if (SelectedValue != 0)
+            {
+                ddlTypeOfService.BorderColor = ColorTranslator.FromHtml(SetGray);
+                Session["Usluge-event_controle-DropDownList"] = ((DropDownList)sender);
+                SetFocusOnDropDownLists();
+            }
+        }
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                myDiv2.Visible = false;
+                myDiv3.Visible = true;
+            }
+            catch (Exception ex)
+            {
+                log.Error("btnSearch error. " + ex.Message);
+                ScriptManager.RegisterStartupScript(this, GetType(), "erroralert", "erroralert();", true);
             }
         }
     }

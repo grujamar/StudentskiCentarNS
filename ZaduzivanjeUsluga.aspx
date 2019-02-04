@@ -143,7 +143,7 @@
                                         <asp:Label id="spanprice" runat="server" CssClass="submit-span">*</asp:Label><asp:Label id="lblprice" runat="server" CssClass="submit-label ml-2">Iznos:</asp:Label>
                                     </div>
                                     <div class="col-12 col-lg-5">
-                                        <asp:TextBox ID="txtprice" runat="server" CssClass="price-textbox" maxlength="10" TabIndex="3" ontextchanged="txtprice_TextChanged" AutoPostBack="true"></asp:TextBox>
+                                        <asp:TextBox ID="txtprice" runat="server" CssClass="price-textbox" maxlength="8" TabIndex="3" ontextchanged="txtprice_TextChanged" AutoPostBack="true"></asp:TextBox>
                                         <asp:Label id="priceexample" runat="server" CssClass="submit-example ml-2">Primer: 3.000 din</asp:Label>
                                     </div>
                                     <div class="col-12 col-lg-5 mb-3 mb-lg-0">
@@ -174,14 +174,66 @@
                     </asp:UpdatePanel>
                 </div>
             </section><!--section submitform end-->
+            <!--section search start-->
+            <section class="search-section py-1 py-md-2">
+                <div class="container">
+                    <div class="row">
+                        <!--div search start-->
+                        <div class="col-12 col-md-4 mb-1">
+                        </div>
+                        <div class="col-12 col-md-4 mb-1 mb-4 text-center">
+                            <asp:Button ID="btnSearch" runat="server" Text=">>>Pretraži zaduživanje za određenu uslugu<<<" CssClass="btn btn-outline-secondary" OnClick="btnSearch_Click" TabIndex="9"/>
+                        </div>
+                        <div class="col-12 col-md-4 mb-1">
+                        </div><!--div search end-->
+                    </div>
+                    <asp:UpdatePanel id="UpdatePanel3" runat="server">
+                        <ContentTemplate>
+                            <fieldset>
+                                <div class="row" runat="server" id="myDiv3">
+                                    <div class="col-12 col-md-5 mb-1 my-3 text-center text-md-right">
+                                        <asp:DropDownList ID="ddlCashier1" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="PunoIme" DataValueField="IDOsoba" OnSelectedIndexChanged="ddlCashier1_SelectedIndexChanged" DataSourceID="dsBlagajnice1" TabIndex="1">
+                                        <asp:ListItem Selected="True" Value="0">--Izaberite--</asp:ListItem>
+                                        </asp:DropDownList>                      
+                                        <asp:SqlDataSource ID="dsBlagajnice1" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT IDOsoba, PunoIme FROM blVMoguciBlagajniciZaZaduzivanje"></asp:SqlDataSource>
+                                    </div>
+                                    <div class="col-12 col-md-7 mb-1 my-3 text-center text-md-left">
+                                        <asp:Button ID="btnSearch1" runat="server" Text="Pretraži po blagajnici" CssClass="btn btn-danger" OnClick="btnSearch1_Click"/>
+                                        <asp:Button ID="btnBack" runat="server" Text="Nazad" CssClass="btn" OnClick="btnBack_Click"/>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                </div>
+            </section><!--section search end-->
             <!--section GridView start-->
-            <section class="section-gridview py-1">
+            <section class="section-gridview mb-3 mb-md-5">
                 <div class="container container-grid">
                     <asp:UpdatePanel id="UpdatePanel4" runat="server">
                         <ContentTemplate>
                             <fieldset>
                                 <div class="table-responsive">
-
+                                    <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowHeaderWhenEmpty="True" Width="100%" DataKeyNames="IDStavkaBlagajnickogIzvestaja" OnPageIndexChanging="GridView1_PageIndexChanging" OnRowEditing="GridView1_RowEditing" OnRowDeleting="GridView1_RowDeleting" style="margin-top: 0px" RowStyle-CssClass="rowHover">
+                                        <Columns>
+                                            <asp:BoundField DataField="IDStavkaBlagajnickogIzvestaja" HeaderText="IDStavkaBlagajnickogIzvestaja" SortExpression="IDStavkaBlagajnickogIzvestaja" Visible="false"/>
+                                            <asp:BoundField DataField="PunoIme" HeaderText="Blagajnica" SortExpression="PunoIme" readonly="true"/>
+                                            <asp:BoundField DataField="TipStavkeBlagajnickogIzvestaja" HeaderText="Tip usluge" SortExpression="TipStavkeBlagajnickogIzvestaja" readonly="true"/>
+                                            <asp:BoundField DataField="Datum" HeaderText="Datum" SortExpression="Datum" DataFormatString="{0:yyyy-MM-dd}"/>
+                                            <asp:BoundField DataField="Iznos" HeaderText="Iznos" SortExpression="Iznos" />
+                                            <asp:BoundField DataField="KadaJeUpisano" HeaderText="Datum upisa" SortExpression="KadaJeUpisano" readonly="true"/>
+                                            <asp:BoundField DataField="Storno" HeaderText="Storno" SortExpression="Storno" readonly="true"/>
+                                            <asp:TemplateField HeaderText="Poništi">
+                                                 <ItemTemplate>
+                                                    <asp:LinkButton Text="" runat="server" CssClass="fa fa-trash-o icons" CommandName="Delete"/>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                        </Columns>
+                                        <FooterStyle BackColor="#333333" BorderColor="#333333" BorderWidth="2px" ForeColor="White" HorizontalAlign="Center" VerticalAlign="Middle" />
+                                        <HeaderStyle ForeColor="White" BackColor="#333333" BorderColor="White" BorderWidth="2px" BorderStyle="Solid" HorizontalAlign="Center" VerticalAlign="Middle" />
+                                        <PagerStyle BackColor="#CCCCCC" BorderColor="#999999" ForeColor="#333333" HorizontalAlign="Center" VerticalAlign="Middle" />
+                                        <RowStyle BackColor="Silver" BorderColor="Black" BorderWidth="1px" Font-Bold="False" Font-Names="Arial" ForeColor="Black" HorizontalAlign="Center" />
+                                    </asp:GridView>
                                 </div>
                             </fieldset>
                         </ContentTemplate>

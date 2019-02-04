@@ -184,6 +184,30 @@ public class Utility
         }
     }
 
+    public void upisiZaduzenje(int TypeOfServiceSelectedValue, int CashierSelectedValue, decimal Price, string Date, int Operater)
+    {
+        try
+        {
+            SqlConnection objConn = new SqlConnection(scnsconnectionstring);
+            SqlCommand objCmd = new SqlCommand("blSpZaduzivanjeBlagajnika", objConn);
+            objCmd.CommandType = CommandType.StoredProcedure;
+
+            objCmd.Parameters.Add("@IDTipStavkeBlagajnickogIzvestaja", System.Data.SqlDbType.Int).Value = TypeOfServiceSelectedValue;
+            objCmd.Parameters.AddWithValue("@Datum", Date);
+            objCmd.Parameters.Add("@Iznos", System.Data.SqlDbType.Decimal).Value = Price;
+            objCmd.Parameters.Add("@Operater", System.Data.SqlDbType.Int).Value = CashierSelectedValue;
+
+            objConn.Open();
+            objCmd.ExecuteNonQuery();
+            objConn.Close();
+        }
+        catch (Exception ex)
+        {
+            log.Error("Error while inserting All values. " + ex.Message);
+            throw new Exception("Error while inserting All values. " + ex.Message);
+        }
+    }
+
     public void BindGridView(GridView GridView1)
     {
         using (SqlConnection con = new SqlConnection(scnsconnectionstring))
@@ -214,6 +238,35 @@ public class Utility
     }
 
 
+    public void BindGridViewZaduzenja(GridView GridView1)
+    {
+        using (SqlConnection con = new SqlConnection(scnsconnectionstring))
+        {
+            using (SqlCommand cmd = new SqlCommand("SELECT TOP (100) PERCENT IDStavkaBlagajnickogIzvestaja, PunoIme, TipStavkeBlagajnickogIzvestaja, Datum, Iznos, KadaJeUpisano, Storno FROM dbo.blVPregledUpisanihZaduzenja ORDER BY KadaJeUpisano DESC"))
+            {
+                SqlDataAdapter sda = new SqlDataAdapter();
+                try
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    sda.SelectCommand = cmd;
+
+                    DataSet ds = new DataSet();
+                    sda.Fill(ds);
+
+                    // BIND DATABASE WITH THE GRIDVIEW.
+                    GridView1.DataSource = ds;
+                    GridView1.DataBind();
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Error while BindGridView. " + ex.Message);
+                    throw new Exception("Error while BindGridView. " + ex.Message);
+                }
+            }
+        }
+    }
+
     public void obrisiRed(int IDRow)
     {
         try
@@ -232,6 +285,27 @@ public class Utility
         {
             log.Error("Error while setting Ponisteno=1 on Row with ID: " + IDRow + ". " + ex.Message);
             throw new Exception("Error while setting Ponisteno=1 on Row with ID: " + IDRow + ". " + ex.Message);
+        }
+    }
+
+    public void stornirajRed(int IDRow)
+    {
+        try
+        {
+            SqlConnection objConn = new SqlConnection(scnsconnectionstring);
+            SqlCommand objCmd = new SqlCommand("blSpPonistavanjeZaduzenjaBlagajnika", objConn);
+            objCmd.CommandType = CommandType.StoredProcedure;
+
+            objCmd.Parameters.Add("@IDStavkaBlagajnickogIzvestaja", System.Data.SqlDbType.Int).Value = IDRow;
+
+            objConn.Open();
+            objCmd.ExecuteNonQuery();
+            objConn.Close();
+        }
+        catch (Exception ex)
+        {
+            log.Error("Error while call procedure blSpPonistavanjeZaduzenjaBlagajnika on Row with ID: " + IDRow + ". " + ex.Message);
+            throw new Exception("Error while call procedure blSpPonistavanjeZaduzenjaBlagajnika on Row with ID: " + IDRow + ". " + ex.Message);
         }
     }
 
@@ -320,6 +394,37 @@ public class Utility
                 {
                     log.Error("Error while BindGridView. " + ex.Message);
                     throw new Exception("Error while BindGridView. " + ex.Message);
+                }
+            }
+        }
+    }
+
+
+    public void BindSearchingGridViewZaduzenja(GridView GridView1, string SelectedValue)
+    {
+        using (SqlConnection con = new SqlConnection(scnsconnectionstring))
+        {
+            using (SqlCommand cmd = new SqlCommand("SELECT TOP (100) PERCENT IDStavkaBlagajnickogIzvestaja, PunoIme, TipStavkeBlagajnickogIzvestaja, Datum, Iznos, KadaJeUpisano, Storno FROM dbo.blVPregledUpisanihZaduzenja WHERE (PunoIme = @punoime) ORDER BY KadaJeUpisano DESC"))
+            {
+                cmd.Parameters.AddWithValue("@punoime", SelectedValue);
+                SqlDataAdapter sda = new SqlDataAdapter();
+                try
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    sda.SelectCommand = cmd;
+
+                    DataSet ds = new DataSet();
+                    sda.Fill(ds);
+
+                    // BIND DATABASE WITH THE GRIDVIEW.
+                    GridView1.DataSource = ds;
+                    GridView1.DataBind();
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Error while BindSearchingGridViewZaduzenja. " + ex.Message);
+                    throw new Exception("Error while BindSearchingGridViewZaduzenja. " + ex.Message);
                 }
             }
         }
