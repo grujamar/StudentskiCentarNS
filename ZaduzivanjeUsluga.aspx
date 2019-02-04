@@ -119,7 +119,7 @@
                                 <div class="row" runat="server">
                                     <!--div ddlCashier start-->
                                     <div class="col-12 col-lg-2 mb-1 mb-md-4">
-                                        <asp:Label id="spanCashier" runat="server" CssClass="submit-span">*</asp:Label><asp:Label id="lblCashier" runat="server" CssClass="submit-label ml-2">Blagajnica:</asp:Label> 
+                                        <asp:Label id="spanCashier" runat="server" CssClass="submit-span">*</asp:Label><asp:Label id="lblCashier" runat="server" CssClass="submit-label ml-2">Osoba:</asp:Label> 
                                     </div>
                                     <div class="col-12 col-lg-5">
                                         <asp:DropDownList ID="ddlCashier" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="PunoIme" DataValueField="IDOsoba" OnSelectedIndexChanged="ddlCashier_SelectedIndexChanged" DataSourceID="dsBlagajnice" TabIndex="2">
@@ -198,7 +198,7 @@
                                         <asp:SqlDataSource ID="dsBlagajnice1" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT IDOsoba, PunoIme FROM blVMoguciBlagajniciZaZaduzivanje"></asp:SqlDataSource>
                                     </div>
                                     <div class="col-12 col-md-7 mb-1 my-3 text-center text-md-left">
-                                        <asp:Button ID="btnSearch1" runat="server" Text="Pretraži po blagajnici" CssClass="btn btn-danger" OnClick="btnSearch1_Click"/>
+                                        <asp:Button ID="btnSearch1" runat="server" Text="Pretraži po osobi" CssClass="btn btn-danger" OnClick="btnSearch1_Click"/>
                                         <asp:Button ID="btnBack" runat="server" Text="Nazad" CssClass="btn" OnClick="btnBack_Click"/>
                                     </div>
                                 </div>
@@ -217,12 +217,12 @@
                                     <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowHeaderWhenEmpty="True" Width="100%" DataKeyNames="IDStavkaBlagajnickogIzvestaja" OnPageIndexChanging="GridView1_PageIndexChanging" OnRowEditing="GridView1_RowEditing" OnRowDeleting="GridView1_RowDeleting" style="margin-top: 0px" RowStyle-CssClass="rowHover">
                                         <Columns>
                                             <asp:BoundField DataField="IDStavkaBlagajnickogIzvestaja" HeaderText="IDStavkaBlagajnickogIzvestaja" SortExpression="IDStavkaBlagajnickogIzvestaja" Visible="false"/>
-                                            <asp:BoundField DataField="PunoIme" HeaderText="Blagajnica" SortExpression="PunoIme" readonly="true"/>
+                                            <asp:BoundField DataField="PunoIme" HeaderText="Osoba" SortExpression="PunoIme" readonly="true"/>
                                             <asp:BoundField DataField="TipStavkeBlagajnickogIzvestaja" HeaderText="Tip usluge" SortExpression="TipStavkeBlagajnickogIzvestaja" readonly="true"/>
-                                            <asp:BoundField DataField="Datum" HeaderText="Datum" SortExpression="Datum" DataFormatString="{0:yyyy-MM-dd}"/>
+                                            <asp:BoundField DataField="Datum" HeaderText="Datum" SortExpression="Datum" DataFormatString="{0:dd-MM-yyyy}"/>
                                             <asp:BoundField DataField="Iznos" HeaderText="Iznos" SortExpression="Iznos" />
-                                            <asp:BoundField DataField="KadaJeUpisano" HeaderText="Datum upisa" SortExpression="KadaJeUpisano" readonly="true"/>
-                                            <asp:BoundField DataField="Storno" HeaderText="Storno" SortExpression="Storno" readonly="true"/>
+                                            <asp:BoundField DataField="KadaJeUpisano" HeaderText="Datum upisa" SortExpression="KadaJeUpisano" DataFormatString="{0:dd-MM-yyyy HH:mm:ss}" readonly="true"/>
+                                            <asp:BoundField DataField="Storno" HeaderText="Storno" SortExpression="Storno" DataFormatString="{0:dd-MM-yyyy}" readonly="true"/>
                                             <asp:TemplateField HeaderText="Poništi">
                                                  <ItemTemplate>
                                                     <asp:LinkButton Text="" runat="server" CssClass="fa fa-trash-o icons" CommandName="Delete"/>

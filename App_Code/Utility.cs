@@ -339,7 +339,7 @@ public class Utility
     {
         using (SqlConnection con = new SqlConnection(scnsconnectionstring))
         {   
-            using (SqlCommand cmd = new SqlCommand("SELECT TOP (100) PERCENT dbo.blEksternoPlacanje.IDEksternoPlacanje, dbo.blEksternoPlacanje.DatumPlacanja,dbo.blEksternoPlacanje.BrojPlacanja, dbo.blEksternoPlacanje.Opis, dbo.blEksternoPlacanje.Iznos, dbo.blEksternoPlacanje.Operater, dbo.blOrganizacija.NazivOrganizacije, dbo.pisTipPlacanja.TipPlacanja, dbo.blEksternoPlacanje.Ponisteno FROM  dbo.blEksternoPlacanje INNER JOIN dbo.blOrganizacija ON dbo.blEksternoPlacanje.IDOrganizacija = dbo.blOrganizacija.IDOrganizacija INNER JOIN dbo.pisTipPlacanja ON dbo.blEksternoPlacanje.IDTipPlacanja = dbo.pisTipPlacanja.IDTipPlacanja WHERE(dbo.blEksternoPlacanje.BrojPlacanja = @BrojFakture) ORDER BY dbo.blEksternoPlacanje.IDEksternoPlacanje DESC"))
+            using (SqlCommand cmd = new SqlCommand("SELECT TOP (100) PERCENT dbo.blEksternoPlacanje.IDEksternoPlacanje, dbo.blEksternoPlacanje.DatumPlacanja,dbo.blEksternoPlacanje.BrojPlacanja, dbo.blEksternoPlacanje.Opis, dbo.blEksternoPlacanje.Iznos, dbo.blEksternoPlacanje.Operater, dbo.blOrganizacija.NazivOrganizacije, dbo.pisTipPlacanja.TipPlacanja, dbo.blEksternoPlacanje.Ponisteno FROM  dbo.blEksternoPlacanje INNER JOIN dbo.blOrganizacija ON dbo.blEksternoPlacanje.IDOrganizacija = dbo.blOrganizacija.IDOrganizacija INNER JOIN dbo.pisTipPlacanja ON dbo.blEksternoPlacanje.IDTipPlacanja = dbo.pisTipPlacanja.IDTipPlacanja WHERE(dbo.blEksternoPlacanje.BrojPlacanja like ('%" + BrojFakture + "%')) ORDER BY dbo.blEksternoPlacanje.IDEksternoPlacanje DESC"))
             {
                 cmd.Parameters.AddWithValue("@BrojFakture", BrojFakture);
                 SqlDataAdapter sda = new SqlDataAdapter();
@@ -404,7 +404,7 @@ public class Utility
     {
         using (SqlConnection con = new SqlConnection(scnsconnectionstring))
         {
-            using (SqlCommand cmd = new SqlCommand("SELECT TOP (100) PERCENT IDStavkaBlagajnickogIzvestaja, PunoIme, TipStavkeBlagajnickogIzvestaja, Datum, Iznos, KadaJeUpisano, Storno FROM dbo.blVPregledUpisanihZaduzenja WHERE (PunoIme = @punoime) ORDER BY KadaJeUpisano DESC"))
+            using (SqlCommand cmd = new SqlCommand("SELECT TOP (100) PERCENT IDStavkaBlagajnickogIzvestaja, PunoIme, TipStavkeBlagajnickogIzvestaja, Datum, Iznos, KadaJeUpisano, Storno FROM dbo.blVPregledUpisanihZaduzenja WHERE (PunoIme =  @punoime) ORDER BY KadaJeUpisano DESC"))
             {
                 cmd.Parameters.AddWithValue("@punoime", SelectedValue);
                 SqlDataAdapter sda = new SqlDataAdapter();

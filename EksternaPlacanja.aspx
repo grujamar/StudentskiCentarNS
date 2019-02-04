@@ -237,15 +237,21 @@
                         <div class="col-12 col-md-4 mb-1">
                         </div><!--div search end-->
                     </div>
-                    <div class="row" runat="server" id="myDiv3">
-                        <div class="col-12 col-md-5 mb-1 my-3 text-center text-md-right">
-                            <asp:TextBox ID="txtsearch" runat="server" CssClass="submit-textbox" maxlength="20"></asp:TextBox>
-                        </div>
-                        <div class="col-12 col-md-7 mb-1 my-3 text-center text-md-left">
-                            <asp:Button ID="btnSearch1" runat="server" Text="Pretraži BrojPlaćanja" CssClass="btn btn-danger" OnClick="btnSearch1_Click"/>
-                            <asp:Button ID="btnBack" runat="server" Text="Nazad" CssClass="btn" OnClick="btnBack_Click"/>
-                        </div>
-                    </div>
+                    <asp:UpdatePanel id="UpdatePanel6" runat="server">
+                        <ContentTemplate>
+                            <fieldset>
+                                <div class="row" runat="server" id="myDiv3">
+                                    <div class="col-12 col-md-5 mb-1 my-3 text-center text-md-right">
+                                        <asp:TextBox ID="txtsearch" runat="server" CssClass="submit-textbox" maxlength="20"></asp:TextBox>
+                                    </div>
+                                    <div class="col-12 col-md-7 mb-1 my-3 text-center text-md-left">
+                                        <asp:Button ID="btnSearch1" runat="server" Text="Pretraži po broju plaćanja" CssClass="btn btn-danger" OnClick="btnSearch1_Click"/>
+                                        <asp:Button ID="btnBack" runat="server" Text="Nazad" CssClass="btn" OnClick="btnBack_Click"/>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
                 </div>
             </section><!--section search end-->
             <!--section GridView start-->
@@ -262,10 +268,10 @@
                                             <asp:BoundField DataField="NazivOrganizacije" HeaderText="Naziv organizacije" SortExpression="NazivOrganizacije" readonly="true"/>
                                             <asp:BoundField DataField="BrojPlacanja" HeaderText="Broj plaćanja" SortExpression="BrojPlacanja" />
                                             <asp:BoundField DataField="Iznos" HeaderText="Iznos" SortExpression="Iznos" />
-                                            <asp:BoundField DataField="DatumPlacanja" HeaderText="Datum plaćanja" SortExpression="DatumPlacanja" DataFormatString="{0:yyyy-MM-dd}"/>
+                                            <asp:BoundField DataField="DatumPlacanja" HeaderText="Datum plaćanja" SortExpression="DatumPlacanja" DataFormatString="{0:dd-MM-yyyy}"/>
                                             <asp:BoundField DataField="Opis" HeaderText="Opis" SortExpression="Opis" />
                                             <asp:BoundField DataField="Operater" HeaderText="Operater" SortExpression="Operater" readonly="true"/>
-                                            <asp:BoundField DataField="Ponisteno" HeaderText="Poništeno" SortExpression="Ponisteno" readonly="true"/>
+                                            <asp:BoundField DataField="Ponisteno" HeaderText="Poništeno" SortExpression="Ponisteno" DataFormatString="{0:dd-MM-yyyy HH:mm:ss}" readonly="true"/>
                                             <asp:TemplateField HeaderText="Promeni">
                                                 <ItemTemplate>
                                                     <asp:LinkButton Text="" runat="server" CssClass="fa fa-pencil-square-o icons" CommandName="Edit" />
