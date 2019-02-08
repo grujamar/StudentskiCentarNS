@@ -1,6 +1,7 @@
 ﻿using log4net;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace SCNS
         public string SetNothing = Constants.SetNothing;
         public string SetLightGray = Constants.SetLightGray;
 
+
         protected void Page_Load(object sender, EventArgs e)
         {
             Utility utility = new Utility();
@@ -33,16 +35,81 @@ namespace SCNS
             if (!Page.IsPostBack)
             {
                 SetBordersGray();
-                utility.BindGridViewZaduzenja(GridView1);
-                //myDiv1.Visible = false;
                 myDiv2.Visible = true;
                 myDiv3.Visible = false;
                 CustomValidatorActionAll(true);
+                GridView2.Visible = false;
 
                 log.Info("Aplication successfully start. ");
             }
         }
+        /*
+        protected void BindGridView()
+        {
+            try
+            {
+                Utility utility = new Utility();
+                DataTable dt = new DataTable();
+                utility.BindGridViewZaduzenja(GridView1, out dt);
 
+                // BIND DATABASE WITH THE GRIDVIEW.
+                if (dt.Rows.Count > 0)
+                {
+                    if (Session["TableSorting"].ToString() != string.Empty)
+                    {
+                        DataTable dt1 = (DataTable)Session["TableSorting"];
+                        GridView1.DataSource = dt1;
+                        GridView1.DataBind();
+                    }
+                    else
+                    {
+                        GridView1.DataSource = dt;
+                        GridView1.DataBind();
+                        ViewState["dt"] = dt;
+                        ViewState["sort"] = "Asc";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error while BindGridView. " + ex.Message);
+                throw new Exception("Error while BindGridView. " + ex.Message);
+            }
+        }
+
+        protected void BindSearchingGridView(string SelectedValue)
+        {
+            try
+            {
+                Utility utility = new Utility();
+                DataTable dt = new DataTable();
+                utility.BindSearchingGridViewZaduzenja(GridView1, SelectedValue, out dt);
+
+                // BIND DATABASE WITH THE GRIDVIEW.
+                if (dt.Rows.Count > 0)
+                {
+                    if (Session["TableSorting"].ToString() != string.Empty)
+                    {
+                        DataTable dt1 = (DataTable)Session["TableSorting"];
+                        GridView1.DataSource = dt1;
+                        GridView1.DataBind();
+                    }
+                    else
+                    {
+                        GridView1.DataSource = dt;
+                        GridView1.DataBind();
+                        ViewState["dt"] = dt;
+                        ViewState["sort"] = "Asc";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error while BindSearchingGridView. " + ex.Message);
+                throw new Exception("Error while BindSearchingGridView. " + ex.Message);
+            }
+        }
+        */
         private void AvoidCashing()
         {
             Response.Cache.SetNoStore();
@@ -140,6 +207,8 @@ namespace SCNS
         {
             try
             {
+                Page.Validate("AddCustomValidatorToGroupZaduzenja");
+
                 if (Page.IsValid)
                 {
                     int Operater = 11111;
@@ -151,7 +220,7 @@ namespace SCNS
                     Utility utility = new Utility();
                     log.Debug("Fields to import: " + ddlTypeOfService.SelectedItem + " " + ddlCashier.SelectedItem + " " + txtprice.Text + " " + FinalDate + " " + Operater);
                     ImportFinishedValuesInDatabase(utility, Convert.ToInt32(ddlTypeOfService.SelectedValue), Convert.ToInt32(ddlCashier.SelectedValue), Convert.ToDecimal(txtprice.Text), FinalDate, Operater);
-                    utility.BindGridViewZaduzenja(GridView1);
+                    GridView1.DataBind();
                     errLabel1.Text = string.Empty;
                     errLabel2.Text = string.Empty;
                 }
@@ -401,21 +470,44 @@ namespace SCNS
                 SetFocusOnTextbox();
             }
         }
-
+        /*
         protected void GridView1_PageIndexChanging(object sender, System.Web.UI.WebControls.GridViewPageEventArgs e)
         {
             Utility utility = new Utility();
             // GRIDVIEW PAGING.
             GridView1.PageIndex = e.NewPageIndex;
-            utility.BindGridViewZaduzenja(GridView1);
+            BindGridView();
         }
+
+        protected void GridView1_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            DataTable dt1 = (DataTable)ViewState["dt"];
+
+            if (dt1.Rows.Count > 0)
+            {
+                if (Convert.ToString(ViewState["sort"]) == "Asc")
+                {
+                    dt1.DefaultView.Sort = e.SortExpression + " Desc";
+                    ViewState["sort"] = "Desc";
+                }
+                else
+                {
+                    dt1.DefaultView.Sort = e.SortExpression + " Asc";
+                    ViewState["sort"] = "Asc";
+                }
+                GridView1.DataSource = dt1;
+                GridView1.DataBind();
+                Session["TableSorting"] = dt1.DefaultView.ToTable();
+            }
+        }
+
 
         protected void GridView1_RowEditing(object sender, GridViewEditEventArgs e)
         {
             SetBordersGray();
             Utility utility = new Utility();
             GridView1.EditIndex = e.NewEditIndex;
-            utility.BindGridViewZaduzenja(GridView1);
+            BindGridView();
         }
 
         protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
@@ -438,7 +530,7 @@ namespace SCNS
                 CustomValidatorActionAll(true);
             }
         }
-
+        */
         protected void btnBack_Click(object sender, EventArgs e)
         {
             try
@@ -456,8 +548,7 @@ namespace SCNS
         {
             try
             {
-                Utility utility = new Utility();
-                BindGridFinal(utility);
+                GridView2.DataBind();
             }
             catch (Exception ex)
             {
@@ -465,20 +556,20 @@ namespace SCNS
                 ScriptManager.RegisterStartupScript(this, GetType(), "erroralertSearch", "erroralertSearch();", true);
             }
         }
-
+        /*
         protected void BindGridFinal(Utility utility)
         {
             string SelectedValue = ddlCashier1.SelectedItem.Text;
             if (SelectedValue != "--Izaberite--")
             {
-                utility.BindSearchingGridViewZaduzenja(GridView1, SelectedValue);
+                BindSearchingGridView(SelectedValue);
             }
             else
             {
-                utility.BindGridViewZaduzenja(GridView1);
+                BindGridView();
             }
         }
-
+        
         protected void ddlCashier1_SelectedIndexChanged(object sender, EventArgs e)
         {
             int SelectedValue = Convert.ToInt32(ddlCashier1.SelectedValue);
@@ -489,13 +580,15 @@ namespace SCNS
                 SetFocusOnDropDownLists();
             }
         }
-
+        */
         protected void btnSearch_Click(object sender, EventArgs e)
         {
             try
             {
                 myDiv2.Visible = false;
                 myDiv3.Visible = true;
+                GridView1.Visible = false;
+                GridView2.Visible = true;
             }
             catch (Exception ex)
             {
@@ -503,5 +596,6 @@ namespace SCNS
                 ScriptManager.RegisterStartupScript(this, GetType(), "erroralert", "erroralert();", true);
             }
         }
+
     }
 }

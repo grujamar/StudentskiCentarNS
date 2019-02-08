@@ -107,7 +107,7 @@
                                         <asp:SqlDataSource ID="dsTipUsluge" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT IDTipStavkeBlagajnickogIzvestaja, TipStavkeBlagajnickogIzvestaja FROM blVMoguceStavkeZaZaduzivanje"></asp:SqlDataSource>
                                     </div>
                                     <div class="col-12 col-lg-5 mb-3 mb-lg-0">
-                                        <asp:CustomValidator runat="server" id="cvTypeOfService" controltovalidate="ddlTypeOfService" errormessage="" OnServerValidate="CvTypeOfService_ServerValidate" CssClass="submit-customValidator" Display="Dynamic" ForeColor="Red" ValidateEmptyText="true"/>
+                                        <asp:CustomValidator runat="server" id="cvTypeOfService" controltovalidate="ddlTypeOfService" errormessage="" OnServerValidate="CvTypeOfService_ServerValidate" CssClass="submit-customValidator" Display="Dynamic" ForeColor="Red" ValidateEmptyText="true" ValidationGroup="AddCustomValidatorToGroupZaduzenja"/>
                                     </div><!--div ddlTypeOfService end-->
                                 </div>
                             </fieldset>
@@ -128,7 +128,7 @@
                                         <asp:SqlDataSource ID="dsBlagajnice" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT IDOsoba, PunoIme FROM blVMoguciBlagajniciZaZaduzivanje"></asp:SqlDataSource>
                                     </div>
                                     <div class="col-12 col-lg-5 mb-3 mb-lg-0">
-                                        <asp:CustomValidator runat="server" id="cvCashier" controltovalidate="ddlCashier" errormessage="" OnServerValidate="CvCashier_ServerValidate" CssClass="submit-customValidator" Display="Dynamic" ForeColor="Red" ValidateEmptyText="true"/>
+                                        <asp:CustomValidator runat="server" id="cvCashier" controltovalidate="ddlCashier" errormessage="" OnServerValidate="CvCashier_ServerValidate" CssClass="submit-customValidator" Display="Dynamic" ForeColor="Red" ValidateEmptyText="true" ValidationGroup="AddCustomValidatorToGroupZaduzenja"/>
                                     </div><!--div ddlCashier end-->
                                 </div>
                             </fieldset>
@@ -148,7 +148,7 @@
                                     </div>
                                     <div class="col-12 col-lg-5 mb-3 mb-lg-0">
                                         <asp:Label ID="errLabel1" runat="server" CssClass="submit-customValidator"></asp:Label>
-                                        <asp:CustomValidator ID="cvprice" runat="server" ErrorMessage="" controltovalidate="txtprice" Display="Dynamic" ForeColor="Red" CssClass="submit-customValidator" ValidateEmptyText="true" OnServerValidate="Cvprice_ServerValidate"></asp:CustomValidator>
+                                        <asp:CustomValidator ID="cvprice" runat="server" ErrorMessage="" controltovalidate="txtprice" Display="Dynamic" ForeColor="Red" CssClass="submit-customValidator" ValidateEmptyText="true" OnServerValidate="Cvprice_ServerValidate" ValidationGroup="AddCustomValidatorToGroupZaduzenja"></asp:CustomValidator>
                                     </div><!--div price end-->
                                     <!--div date start-->
                                     <div class="col-12 col-lg-2 mb-1 mb-md-4">
@@ -160,7 +160,7 @@
                                     </div>
                                     <div class="col-12 col-lg-5 mb-3 mb-lg-0">
                                         <asp:Label ID="errLabel2" runat="server" CssClass="submit-customValidator"></asp:Label>
-                                        <asp:CustomValidator ID="cvdate" runat="server" ErrorMessage="" controltovalidate="txtdate" Display="Dynamic" ForeColor="Red" CssClass="submit-customValidator" ValidateEmptyText="true" OnServerValidate="Cvdate_ServerValidate"></asp:CustomValidator>
+                                        <asp:CustomValidator ID="cvdate" runat="server" ErrorMessage="" controltovalidate="txtdate" Display="Dynamic" ForeColor="Red" CssClass="submit-customValidator" ValidateEmptyText="true" OnServerValidate="Cvdate_ServerValidate" ValidationGroup="AddCustomValidatorToGroupZaduzenja"></asp:CustomValidator>
                                     </div><!--div date end-->
                                     <!--div button start-->
                                     <div class="col-12 col-md-2">
@@ -192,10 +192,7 @@
                             <fieldset>
                                 <div class="row" runat="server" id="myDiv3">
                                     <div class="col-12 col-md-5 mb-1 my-3 text-center text-md-right">
-                                        <asp:DropDownList ID="ddlCashier1" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="PunoIme" DataValueField="IDOsoba" OnSelectedIndexChanged="ddlCashier1_SelectedIndexChanged" DataSourceID="dsBlagajnice1" TabIndex="1">
-                                        <asp:ListItem Selected="True" Value="0">--Izaberite--</asp:ListItem>
-                                        </asp:DropDownList>                      
-                                        <asp:SqlDataSource ID="dsBlagajnice1" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT IDOsoba, PunoIme FROM blVMoguciBlagajniciZaZaduzivanje"></asp:SqlDataSource>
+                                        <asp:TextBox ID="txtsearch" runat="server" CssClass="submit-textbox" maxlength="20"></asp:TextBox>
                                     </div>
                                     <div class="col-12 col-md-7 mb-1 my-3 text-center text-md-left">
                                         <asp:Button ID="btnSearch1" runat="server" Text="Pretraži po osobi" CssClass="btn btn-danger" OnClick="btnSearch1_Click"/>
@@ -214,7 +211,7 @@
                         <ContentTemplate>
                             <fieldset>
                                 <div class="table-responsive">
-                                    <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowHeaderWhenEmpty="True" Width="100%" DataKeyNames="IDStavkaBlagajnickogIzvestaja" OnPageIndexChanging="GridView1_PageIndexChanging" OnRowEditing="GridView1_RowEditing" OnRowDeleting="GridView1_RowDeleting" style="margin-top: 0px" RowStyle-CssClass="rowHover">
+                                    <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowHeaderWhenEmpty="True" Width="100%" DataKeyNames="IDStavkaBlagajnickogIzvestaja" style="margin-top: 0px" RowStyle-CssClass="rowHover" DataSourceID="dsGridView">
                                         <Columns>
                                             <asp:BoundField DataField="IDStavkaBlagajnickogIzvestaja" HeaderText="IDStavkaBlagajnickogIzvestaja" SortExpression="IDStavkaBlagajnickogIzvestaja" Visible="false"/>
                                             <asp:BoundField DataField="PunoIme" HeaderText="Osoba" SortExpression="PunoIme" readonly="true"/>
@@ -222,18 +219,46 @@
                                             <asp:BoundField DataField="Datum" HeaderText="Datum" SortExpression="Datum" DataFormatString="{0:dd-MM-yyyy}"/>
                                             <asp:BoundField DataField="Iznos" HeaderText="Iznos" SortExpression="Iznos" />
                                             <asp:BoundField DataField="KadaJeUpisano" HeaderText="Datum upisa" SortExpression="KadaJeUpisano" DataFormatString="{0:dd-MM-yyyy HH:mm:ss}" readonly="true"/>
-                                            <asp:BoundField DataField="Storno" HeaderText="Storno" SortExpression="Storno" DataFormatString="{0:dd-MM-yyyy}" readonly="true"/>
-                                            <asp:TemplateField HeaderText="Poništi">
-                                                 <ItemTemplate>
-                                                    <asp:LinkButton Text="" runat="server" CssClass="fa fa-trash-o icons" CommandName="Delete"/>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
+                                            <asp:BoundField DataField="Storno" HeaderText="Storno" SortExpression="Storno" DataFormatString="{0:dd-MM-yyyy HH:mm:ss}" readonly="true"/>
+                                            <asp:CommandField ShowDeleteButton="true" DeleteText="Poništi" ControlStyle-CssClass="link-style-gridview"/>
                                         </Columns>
                                         <FooterStyle BackColor="#333333" BorderColor="#333333" BorderWidth="2px" ForeColor="White" HorizontalAlign="Center" VerticalAlign="Middle" />
                                         <HeaderStyle ForeColor="White" BackColor="#333333" BorderColor="White" BorderWidth="2px" BorderStyle="Solid" HorizontalAlign="Center" VerticalAlign="Middle" />
                                         <PagerStyle BackColor="#CCCCCC" BorderColor="#999999" ForeColor="#333333" HorizontalAlign="Center" VerticalAlign="Middle" />
                                         <RowStyle BackColor="Silver" BorderColor="Black" BorderWidth="1px" Font-Bold="False" Font-Names="Arial" ForeColor="Black" HorizontalAlign="Center" />
                                     </asp:GridView>
+                                    <asp:SqlDataSource ID="dsGridView" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT TOP (100) PERCENT IDStavkaBlagajnickogIzvestaja, PunoIme, TipStavkeBlagajnickogIzvestaja, Datum, Iznos, KadaJeUpisano, Storno FROM dbo.blVPregledUpisanihZaduzenja ORDER BY KadaJeUpisano DESC" DeleteCommand="blSpPonistavanjeZaduzenjaBlagajnika" DeleteCommandType="StoredProcedure">
+                                        <DeleteParameters>
+                                            <asp:Parameter Name="IDStavkaBlagajnickogIzvestaja" Type="Int32" />
+                                        </DeleteParameters>
+                                    </asp:SqlDataSource>
+                                </div>
+                                <div class="table-responsive">
+                                    <asp:GridView ID="GridView2" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowHeaderWhenEmpty="True" Width="100%" DataKeyNames="IDStavkaBlagajnickogIzvestaja" style="margin-top: 0px" RowStyle-CssClass="rowHover" DataSourceID="dsGridView2">
+                                        <Columns>
+                                            <asp:BoundField DataField="IDStavkaBlagajnickogIzvestaja" HeaderText="IDStavkaBlagajnickogIzvestaja" SortExpression="IDStavkaBlagajnickogIzvestaja" Visible="false"/>
+                                            <asp:BoundField DataField="PunoIme" HeaderText="Osoba" SortExpression="PunoIme" readonly="true"/>
+                                            <asp:BoundField DataField="TipStavkeBlagajnickogIzvestaja" HeaderText="Tip usluge" SortExpression="TipStavkeBlagajnickogIzvestaja" readonly="true"/>
+                                            <asp:BoundField DataField="Datum" HeaderText="Datum" SortExpression="Datum" DataFormatString="{0:dd-MM-yyyy}"/>
+                                            <asp:BoundField DataField="Iznos" HeaderText="Iznos" SortExpression="Iznos" />
+                                            <asp:BoundField DataField="KadaJeUpisano" HeaderText="Datum upisa" SortExpression="KadaJeUpisano" DataFormatString="{0:dd-MM-yyyy HH:mm:ss}" readonly="true"/>
+                                            <asp:BoundField DataField="Storno" HeaderText="Storno" SortExpression="Storno" DataFormatString="{0:dd-MM-yyyy HH:mm:ss}" readonly="true"/>
+                                            <asp:CommandField ShowDeleteButton="true" DeleteText="Poništi" ControlStyle-CssClass="link-style-gridview"/>
+                                        </Columns>
+                                        <FooterStyle BackColor="#333333" BorderColor="#333333" BorderWidth="2px" ForeColor="White" HorizontalAlign="Center" VerticalAlign="Middle" />
+                                        <HeaderStyle ForeColor="White" BackColor="#333333" BorderColor="White" BorderWidth="2px" BorderStyle="Solid" HorizontalAlign="Center" VerticalAlign="Middle" />
+                                        <PagerStyle BackColor="#CCCCCC" BorderColor="#999999" ForeColor="#333333" HorizontalAlign="Center" VerticalAlign="Middle" />
+                                        <RowStyle BackColor="Silver" BorderColor="Black" BorderWidth="1px" Font-Bold="False" Font-Names="Arial" ForeColor="Black" HorizontalAlign="Center" />
+                                    </asp:GridView>
+                                    <asp:SqlDataSource ID="dsGridView2" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT TOP (100) PERCENT IDStavkaBlagajnickogIzvestaja, PunoIme, TipStavkeBlagajnickogIzvestaja, Datum, Iznos, KadaJeUpisano, Storno FROM dbo.blVPregledUpisanihZaduzenja ORDER BY KadaJeUpisano DESC" 
+                                        FilterExpression="PunoIme LIKE '%{0}%'" DeleteCommand="blSpPonistavanjeZaduzenjaBlagajnika" DeleteCommandType="StoredProcedure">
+                                        <DeleteParameters>
+                                            <asp:Parameter Name="IDStavkaBlagajnickogIzvestaja" Type="Int32" />
+                                        </DeleteParameters>
+                                        <FilterParameters>
+                                            <asp:ControlParameter Name="PunoIme" ControlID="txtsearch" PropertyName="Text" />
+                                        </FilterParameters>
+                                    </asp:SqlDataSource>
                                 </div>
                             </fieldset>
                         </ContentTemplate>

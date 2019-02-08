@@ -165,7 +165,7 @@ public static class Utils
 
         if (SelectedValue == IDItem)
         {
-            ErrorMessage = "Blagajnica je obavezno polje. ";
+            ErrorMessage = "Osoba je obavezno polje. ";
             returnValue = false;
         }
         else

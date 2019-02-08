@@ -208,7 +208,7 @@ public class Utility
         }
     }
 
-    public void BindGridView(GridView GridView1)
+    public void BindGridView(GridView GridView1, out DataTable dt)
     {
         using (SqlConnection con = new SqlConnection(scnsconnectionstring))
         {
@@ -221,12 +221,8 @@ public class Utility
                     con.Open();
                     sda.SelectCommand = cmd;
 
-                    DataSet ds = new DataSet();
-                    sda.Fill(ds);
-
-                    // BIND DATABASE WITH THE GRIDVIEW.
-                    GridView1.DataSource = ds;
-                    GridView1.DataBind();
+                    dt = new DataTable();
+                    sda.Fill(dt);
                 }
                 catch (Exception ex)
                 {
@@ -238,7 +234,7 @@ public class Utility
     }
 
 
-    public void BindGridViewZaduzenja(GridView GridView1)
+    public void BindGridViewZaduzenja(GridView GridView1, out DataTable dt)
     {
         using (SqlConnection con = new SqlConnection(scnsconnectionstring))
         {
@@ -251,12 +247,8 @@ public class Utility
                     con.Open();
                     sda.SelectCommand = cmd;
 
-                    DataSet ds = new DataSet();
-                    sda.Fill(ds);
-
-                    // BIND DATABASE WITH THE GRIDVIEW.
-                    GridView1.DataSource = ds;
-                    GridView1.DataBind();
+                    dt = new DataTable();
+                    sda.Fill(dt);
                 }
                 catch (Exception ex)
                 {
@@ -335,7 +327,7 @@ public class Utility
     }
 
 
-    public void BindSearchingGridView(GridView GridView1, string BrojFakture)
+    public void BindSearchingGridView(GridView GridView1, string BrojFakture, out DataTable dt)
     {
         using (SqlConnection con = new SqlConnection(scnsconnectionstring))
         {   
@@ -349,24 +341,20 @@ public class Utility
                     con.Open();
                     sda.SelectCommand = cmd;
 
-                    DataSet ds = new DataSet();
-                    sda.Fill(ds);
-
-                    // BIND DATABASE WITH THE GRIDVIEW.
-                    GridView1.DataSource = ds;
-                    GridView1.DataBind();
+                   dt = new DataTable();
+                   sda.Fill(dt);
                 }
                 catch (Exception ex)
                 {
-                    log.Error("Error while BindGridView. " + ex.Message);
-                    throw new Exception("Error while BindGridView. " + ex.Message);
+                    log.Error("Error while BindSearchingGridView. " + ex.Message);
+                    throw new Exception("Error while BindSearchingGridView. " + ex.Message);
                 }
             }
         }
     }
 
 
-    public void BindSearchingGridViewUpdate(GridView GridView1, string BrojFakture, string Iznos, string DatumPlacanja, string Opis)
+    public void BindSearchingGridViewUpdate(GridView GridView1, string BrojFakture, string Iznos, string DatumPlacanja, string Opis, out DataTable dt)
     {
         using (SqlConnection con = new SqlConnection(scnsconnectionstring))
         {
@@ -383,24 +371,20 @@ public class Utility
                     con.Open();
                     sda.SelectCommand = cmd;
 
-                    DataSet ds = new DataSet();
-                    sda.Fill(ds);
-
-                    // BIND DATABASE WITH THE GRIDVIEW.
-                    GridView1.DataSource = ds;
-                    GridView1.DataBind();
+                    dt = new DataTable();
+                    sda.Fill(dt);
                 }
                 catch (Exception ex)
                 {
-                    log.Error("Error while BindGridView. " + ex.Message);
-                    throw new Exception("Error while BindGridView. " + ex.Message);
+                    log.Error("Error while BindSearchingGridViewUpdate. " + ex.Message);
+                    throw new Exception("Error while BindSearchingGridViewUpdate. " + ex.Message);
                 }
             }
         }
     }
 
 
-    public void BindSearchingGridViewZaduzenja(GridView GridView1, string SelectedValue)
+    public void BindSearchingGridViewZaduzenja(GridView GridView1, string SelectedValue, out DataTable dt)
     {
         using (SqlConnection con = new SqlConnection(scnsconnectionstring))
         {
@@ -414,12 +398,8 @@ public class Utility
                     con.Open();
                     sda.SelectCommand = cmd;
 
-                    DataSet ds = new DataSet();
-                    sda.Fill(ds);
-
-                    // BIND DATABASE WITH THE GRIDVIEW.
-                    GridView1.DataSource = ds;
-                    GridView1.DataBind();
+                    dt = new DataTable();
+                    sda.Fill(dt);
                 }
                 catch (Exception ex)
                 {

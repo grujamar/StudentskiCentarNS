@@ -35,11 +35,10 @@ namespace SCNS
             if (!Page.IsPostBack)
             {
                 SetBordersGray();
-                BindGridFinal(utility);
                 myDiv1.Visible = false;
                 myDiv2.Visible = true;
                 myDiv3.Visible = false;
-                CustomValidatorAction(true);
+                GridView2.Visible = false;
 
                 log.Info("Aplication successfully start. ");
             }
@@ -253,6 +252,8 @@ namespace SCNS
         {
             try
             {
+                Page.Validate("AddCustomValidatorToGroup");
+
                 if (Page.IsValid)
                 {
                     int Operater = 11111;
@@ -264,7 +265,7 @@ namespace SCNS
                     Utility utility = new Utility();
                     log.Debug("Fields to import: " + ddlTypeOfPayment.SelectedItem + " " + ddlorganization.SelectedItem + " " + txtfacturenumber.Text + " " + txtprice.Text + " " + FinalDate + " " + txtdescription.Text + " " + Operater);
                     ImportFinishedValuesInDatabase(utility, Convert.ToInt32(ddlTypeOfPayment.SelectedValue), Convert.ToInt32(ddlorganization.SelectedValue), txtfacturenumber.Text, Convert.ToDecimal(txtprice.Text), FinalDate, txtdescription.Text, Operater);
-                    utility.BindGridView(GridView1);
+                    GridView1.DataBind();
                     errLabel3.Text = string.Empty;
                 }
                 else if (!Page.IsValid){
@@ -387,15 +388,23 @@ namespace SCNS
                 throw new Exception("Error while importing All values in database. " + ex.Message);
             }
         }
-
+        /*
         protected void GridView1_PageIndexChanging(object sender, System.Web.UI.WebControls.GridViewPageEventArgs e)
         {
-            Utility utility = new Utility();
-            // GRIDVIEW PAGING.
-            GridView1.PageIndex = e.NewPageIndex;
-            utility.BindGridView(GridView1);
+            try
+            {
+                Utility utility = new Utility();
+                // GRIDVIEW PAGING.
+                GridView1.PageIndex = e.NewPageIndex;
+                BindGridFinal(utility);
+            }
+            catch (Exception ex)
+            {
+                log.Error("PageIndexChanging error. " + ex.Message);
+                ScriptManager.RegisterStartupScript(this, GetType(), "erroralert", "erroralert();", true);
+            }
         }
-
+        */
         protected void CustomValidatorAction(Boolean action)
         {
             cvTypeOfPayment.Enabled = action;
@@ -415,7 +424,7 @@ namespace SCNS
             cvdate.Enabled = action;
             cvAdd.Enabled = action;
         }
-
+        /*
         protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             try
@@ -436,7 +445,7 @@ namespace SCNS
                 CustomValidatorAction(true);
             }
         }
-
+        
         protected void OnUpdate(object sender, EventArgs e)
         {
             try
@@ -467,7 +476,7 @@ namespace SCNS
                 GridView1.EditIndex = -1;
 
                 utility.editujRed(txtBrojPlacanja, txtIznos, txtDatumPlacanjaKonacno, txtOpis, lblIDEksternoPlacanje);
-                BindGridFinalUpdate(utility, txtBrojPlacanja, txtIznos, txtDatumPlacanjaKonacno, txtOpis);
+                //BindGridFinalUpdate(utility, txtBrojPlacanja, txtIznos, txtDatumPlacanjaKonacno, txtOpis);
                 CustomValidatorAction(true);
             }
             catch (Exception ex)
@@ -484,20 +493,21 @@ namespace SCNS
             SetBordersGray();
             Utility utility = new Utility();
             GridView1.EditIndex = e.NewEditIndex;
-            BindGridFinal(utility);
+            //BindGridFinal(utility);
             CustomValidatorAction(true);
         }
 
         protected void OnCancel(object sender, EventArgs e)
         {
             CustomValidatorActionAll(false);
+            SetBordersGray();
             Utility utility = new Utility();
             GridView1.EditIndex = -1;
-            BindGridFinal(utility);
+            //BindGridFinal(utility);
             CustomValidatorAction(true);
-            SetBordersGray();
+            
         }
-
+        */
 
         /*ONTEXTCHANGE*/
         protected void txtfacturenumber_TextChanged(object sender, EventArgs e)
@@ -660,6 +670,8 @@ namespace SCNS
             {
                 myDiv2.Visible = false;
                 myDiv3.Visible = true;
+                GridView1.Visible = false;
+                GridView2.Visible = true;
             }
             catch (Exception ex)
             {
@@ -672,8 +684,7 @@ namespace SCNS
         {
             try
             {
-                Utility utility = new Utility();
-                BindGridFinal(utility);
+                GridView2.DataBind();
             }
             catch (Exception ex)
             {
@@ -694,28 +705,141 @@ namespace SCNS
                 ScriptManager.RegisterStartupScript(this, GetType(), "erroralert", "erroralert();", true);
             }
         }
-
+        /*
         protected void BindGridFinal(Utility utility) {
-            if (txtsearch.Text == string.Empty)
+            try
             {
-                utility.BindGridView(GridView1);
+                if (txtsearch.Text == string.Empty)
+                {
+                    BindGridView();
+                }
+                else
+                {
+                    BindSearchingGridView(txtsearch.Text);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                utility.BindSearchingGridView(GridView1, txtsearch.Text);
+                log.Error("Error in BindGridFinal. " + ex.Message);
+                throw new Exception("Error in BindGridFinal. " + ex.Message);
             }
         }
 
         protected void BindGridFinalUpdate(Utility utility, string txtBrojPlacanja, string txtIznos, string txtDatumPlacanja, string txtOpis)
         {
-            if (txtsearch.Text == string.Empty)
+            try
             {
-                utility.BindGridView(GridView1);
+                if (txtsearch.Text == string.Empty)
+                {
+                    BindGridView();
+                }
+                else
+                {
+                    BindSearchingGridViewUpdate(txtsearch.Text, txtBrojPlacanja, txtIznos, txtDatumPlacanja, txtOpis);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                utility.BindSearchingGridViewUpdate(GridView1, txtBrojPlacanja, txtIznos, txtDatumPlacanja, txtOpis);
+                log.Error("Error in BindGridFinalUpdate. " + ex.Message);
+                throw new Exception("Error in BindGridFinalUpdate. " + ex.Message);
             }
         }
+
+
+        protected void BindGridView()
+        {
+            try
+            {
+                Utility utility = new Utility();
+                DataTable dt = new DataTable();
+                utility.BindGridView(GridView1, out dt);
+
+                // BIND DATABASE WITH THE GRIDVIEW.
+                if (dt.Rows.Count > 0)
+                {
+                    GridView1.DataSource = dt;
+                    GridView1.DataBind();
+                    ViewState["dtEP"] = dt;
+                    ViewState["sortEP"] = "Asc";
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error while BindGridView. " + ex.Message);
+                throw new Exception("Error while BindGridView. " + ex.Message);
+            }
+        }
+
+        protected void BindSearchingGridView(string SelectedValue)
+        {
+            try
+            {
+                Utility utility = new Utility();
+                DataTable dt = new DataTable();
+                utility.BindSearchingGridView(GridView1, SelectedValue, out dt);
+
+                // BIND DATABASE WITH THE GRIDVIEW.
+                if (dt.Rows.Count > 0)
+                {
+                    GridView1.DataSource = dt;
+                    GridView1.DataBind();
+                    ViewState["dtEP"] = dt;
+                    ViewState["sortEP"] = "Asc";
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error while BindSearchingGridView. " + ex.Message);
+                throw new Exception("Error while BindSearchingGridView. " + ex.Message);
+            }
+        }
+
+        protected void BindSearchingGridViewUpdate(string SelectedValue, string txtBrojPlacanja, string txtIznos, string txtDatumPlacanja, string txtOpis)
+        {
+            try
+            {
+                Utility utility = new Utility();
+                DataTable dt = new DataTable();
+                utility.BindSearchingGridViewUpdate(GridView1, txtBrojPlacanja, txtIznos, txtDatumPlacanja, txtOpis, out dt);
+
+                // BIND DATABASE WITH THE GRIDVIEW.
+                if (dt.Rows.Count > 0)
+                {
+                    GridView1.DataSource = dt;
+                    GridView1.DataBind();
+                    ViewState["dtEP"] = dt;
+                    ViewState["sortEP"] = "Asc";
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error while BindSearchingGridViewUpdate. " + ex.Message);
+                throw new Exception("Error while BindSearchingGridViewUpdate. " + ex.Message);
+            }
+        }
+
+        
+        protected void GridView1_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            DataTable dt1 = (DataTable)ViewState["dtEP"];
+
+            if (dt1.Rows.Count > 0)
+            {
+                if (Convert.ToString(ViewState["sortEP"]) == "Asc")
+                {
+                    dt1.DefaultView.Sort = e.SortExpression + " Desc";
+                    ViewState["sortEP"] = "Desc";
+                }
+                else
+                {
+                    dt1.DefaultView.Sort = e.SortExpression + " Asc";
+                    ViewState["sortEP"] = "Asc";
+                }
+                GridView1.DataSource = dt1;
+                GridView1.DataBind();
+                //Session["TableSortingEP"] = dt1.DefaultView.ToTable();
+            }
+        }
+        */
     }
 }

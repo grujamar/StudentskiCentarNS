@@ -148,18 +148,24 @@ html{
 
 /*GridView*/
 .section-gridview {
-    height: 600px;
+    height: 750px;
 }
 
 .container-grid {
     max-width: 1140px;
 }
 
-.section-gridview .icons {
+.section-gridview .icons{
     font-size: 25px;
     color: #c22617;
     text-decoration: none;
     text-align: center;
+}
+
+.link-style-gridview {
+    color: #c22617 !important;
+    text-decoration: none;
+    font-weight:bold;
 }
 
 #GridView1 tr:hover {
