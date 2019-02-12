@@ -45,7 +45,7 @@
     }
 
     .section-gridview {
-        max-height: 400px;
+        height: 400px;
     }
 
     .submit .submit-textbox {
@@ -74,7 +74,7 @@
 
 
     .container-grid {
-        max-width:1340px;
+        max-width:1640px;
     }
 }
 

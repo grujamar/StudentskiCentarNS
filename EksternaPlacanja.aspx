@@ -267,9 +267,9 @@
                                             <asp:BoundField DataField="TipPlacanja" HeaderText="Tip plaćanja" SortExpression="TipPlacanja" readonly="true"/>
                                             <asp:BoundField DataField="NazivOrganizacije" HeaderText="Naziv organizacije" SortExpression="NazivOrganizacije" readonly="true"/>
                                             <asp:BoundField DataField="BrojPlacanja" HeaderText="Broj plaćanja" SortExpression="BrojPlacanja" />
-                                            <asp:BoundField DataField="Iznos" HeaderText="Iznos" SortExpression="Iznos" />
+                                            <asp:BoundField DataField="Iznos" HeaderText="Iznos" SortExpression="Iznos"/>
                                             <asp:BoundField DataField="DatumPlacanja" HeaderText="Datum plaćanja" SortExpression="DatumPlacanja" DataFormatString="{0:dd-MM-yyyy}"/>
-                                            <asp:BoundField DataField="Opis" HeaderText="Opis" SortExpression="Opis" />
+                                            <asp:BoundField DataField="Opis" HeaderText="Opis" SortExpression="Opis"/>
                                             <asp:BoundField DataField="Operater" HeaderText="Operater" SortExpression="Operater" readonly="true"/>
                                             <asp:BoundField DataField="Ponisteno" HeaderText="Poništeno" SortExpression="Ponisteno" readonly="true" DataFormatString="{0:dd-MM-yyyy HH:mm:ss}"/>
                                             <asp:CommandField CancelText="Odustani" EditText="Promeni" ShowEditButton="True" UpdateText="Upiši" ControlStyle-CssClass="link-style-gridview"/>
