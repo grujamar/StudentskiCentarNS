@@ -44,10 +44,6 @@
         max-width: 170px;
     }
 
-    .section-gridview {
-        height: 400px;
-    }
-
     .submit .submit-textbox {
         width: 50%;
     }
@@ -72,20 +68,26 @@
         width: 80%;
     }
 
-
     .container-grid {
         max-width:1640px;
+    }
+
+    .section-gridview {
+        height: 600px;
+    }
+}
+
+@media(min-width:1130px) {
+
+    .section-gridview {
+        height: 500px;
     }
 }
 
 
+@media(min-width:1200px) {
 
-
-
-@media(min-width:1200px){
-
-
-    
-    
-    
+    .section-gridview {
+        height: 400px;
+    }
 }
