@@ -55,6 +55,10 @@
     .submit .submit-dropdownlist {
         width: 60%;
     }
+
+    .pr-5 {
+        padding-right:11rem !important;
+    }
 }
 
 
@@ -73,14 +77,14 @@
     }
 
     .section-gridview {
-        height: 600px;
+        min-height: 600px;
     }
 }
 
 @media(min-width:1130px) {
 
     .section-gridview {
-        height: 500px;
+        min-height: 500px;
     }
 }
 
@@ -88,6 +92,6 @@
 @media(min-width:1200px) {
 
     .section-gridview {
-        height: 400px;
+        min-height: 400px;
     }
 }

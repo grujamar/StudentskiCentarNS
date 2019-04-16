@@ -2,27 +2,25 @@
 <header class="py-3" style="background-image: linear-gradient(to right, rgba(220, 220, 220,0.3), rgba(220, 220, 220,0.9))">
     <div class="container">
         <nav class="navbar navbar-expand-md navbar-light px-0">
-        <!--logo start-->
-        <div class="navbar-container" id="navbar-container">
-            <asp:Image id="logo" runat="server" CssClass="logo-image" imageurl="~/img/logo.jpg"/>
-            <asp:Label id="lblscnsnaziv" runat="server" CssClass="scns-name pl-1 pl-sm-4">                               
-                Studentski centar Novi Sad                                    
-            </asp:Label>         
-        </div><!--logo end-->
-        <!---->
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <!--logo start-->
+            <div class="navbar-container" id="navbar-container">
+                <asp:Image id="logo" runat="server" CssClass="logo-image" imageurl="~/img/logo.jpg"/>
+                <asp:Label id="lblscnsnaziv" runat="server" CssClass="scns-name pl-1 pl-sm-4">                               
+                    Studentski centar Novi Sad                                    
+                </asp:Label>         
+            </div><!--logo end-->
+            <!---->
 			<!--header navigation start-->
 			<div class="collapse navbar-collapse" id="main-menu">
-				<ul class="navbar-nav ml-auto mt-2 px-lg-5">
-					<li class="nav-item active">
-						<a class="nav-link" href="ZaduzivanjeUsluga.aspx">Zaduživanje usluga <span class="sr-only">(current)</span></a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="EksternaPlacanja.aspx">Eksterna Plaćanja</a>
-					</li>
-				</ul>                        
+                <div class="navbar-nav ml-auto mt-2 px-lg-5">
+                    <span id="lbl_Timer" style="font-size:21px;">Stranica ažurirana: <span id="date" style="font-size:21px;"></span>
+                        <script>
+                            var d = new Date();
+                            var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+                            document.getElementById("date").innerHTML = d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear() + " u " + d.getHours() + ":" + d.getMinutes() +  ":" + d.getSeconds();
+                        </script>
+                    </span>
+                </div>                    
 			</div><!--header navigation end-->
         </nav>
     </div>

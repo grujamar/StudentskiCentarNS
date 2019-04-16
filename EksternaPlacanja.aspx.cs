@@ -139,6 +139,7 @@ namespace SCNS
                 ddlorganization.BorderColor = ColorTranslator.FromHtml(SetGray);
                 Session["Fakture-event_controle-DropDownList"] = ((DropDownList)sender);
                 SetFocusOnDropDownLists();
+                GridView1.DataBind();
             }
 
         }
@@ -191,6 +192,38 @@ namespace SCNS
             }
         }
 
+        protected void CheckBoxList1_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            try
+            {
+                string ErrorMessage = string.Empty;
+
+                // Create the list to store.
+                List<string> CheckBoxList = new List<string>();
+                // Loop through each item.
+                foreach (ListItem item in CheckBoxList1.Items)
+                {
+                    if (item.Selected)
+                    {
+                        // If the item is selected, add the value to the list.
+                        CheckBoxList.Add(item.Value);
+                    }
+                    else
+                    {
+                        // Item is not selected, do something else.
+                    }
+                }
+                int sizeOfList = CheckBoxList.Count;
+                args.IsValid = Utils.ValidateListSize(sizeOfList, out ErrorMessage);
+                cvCheckbox.ErrorMessage = ErrorMessage;
+            }
+            catch (Exception)
+            {
+                cvCheckbox.ErrorMessage = string.Empty;
+                args.IsValid = false;
+            }
+        }
+
 
         protected void ddlTypeOfPayment_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -200,8 +233,8 @@ namespace SCNS
                 ddlTypeOfPayment.BorderColor = ColorTranslator.FromHtml(SetGray);
                 Session["Fakture-event_controle-DropDownList"] = ((DropDownList)sender);
                 SetFocusOnDropDownLists();
+                GridView1.DataBind();
             }
-
         }
 
         protected void Cvdate_ServerValidate(object source, ServerValidateEventArgs args)
@@ -263,13 +296,23 @@ namespace SCNS
                     string FormatToString = "yyyy-mm-dd";
                     parceDateTime(txtdate.Text, FormatDateTime, FormatToString, out FinalDate);
                     Utility utility = new Utility();
-                    log.Debug("Fields to import: " + ddlTypeOfPayment.SelectedItem + " " + ddlorganization.SelectedItem + " " + txtfacturenumber.Text + " " + txtprice.Text + " " + FinalDate + " " + txtdescription.Text + " " + Operater);
-                    ImportFinishedValuesInDatabase(utility, Convert.ToInt32(ddlTypeOfPayment.SelectedValue), Convert.ToInt32(ddlorganization.SelectedValue), txtfacturenumber.Text, Convert.ToDecimal(txtprice.Text), FinalDate, txtdescription.Text, Operater);
+                    List<int> TipUslugeList = new List<int>();
+                    foreach (ListItem item in CheckBoxList1.Items)
+                    {
+                        if (item.Selected)
+                        {
+                            TipUslugeList.Add(Convert.ToInt32(item.Value));
+                        }
+                    }
+                    ImportFinishedValuesInDatabase(utility, Convert.ToInt32(ddlTypeOfPayment.SelectedValue), Convert.ToInt32(ddlorganization.SelectedValue), txtfacturenumber.Text, Convert.ToDecimal(txtprice.Text), FinalDate, txtdescription.Text, Operater, TipUslugeList);
+                    log.Debug("Fields to import: " + ddlTypeOfPayment.SelectedItem + " " + ddlorganization.SelectedItem + " " + txtfacturenumber.Text + " " + txtprice.Text + " " + FinalDate + " " + txtdescription.Text + " " + Operater + " " + TipUslugeList);
+
                     GridView1.DataBind();
                     errLabel3.Text = string.Empty;
                 }
                 else if (!Page.IsValid){
                     ScriptManager.RegisterStartupScript(this, GetType(), "erroralert", "erroralert();", true);
+                    GridView1.DataBind();
                 }
             }
             catch (Exception ex)
@@ -295,6 +338,7 @@ namespace SCNS
             SetBordersGray();
             myDiv1.Visible = true;
             CustomValidatorAction(true);
+            GridView1.DataBind();
         }
 
         protected void btnAdd_Click(object sender, EventArgs e)
@@ -325,6 +369,7 @@ namespace SCNS
                 }
                 CustomValidatorAction(true);
                 SetBordersGray();
+                GridView1.DataBind();
 
             }
             catch (Exception ex)
@@ -370,18 +415,26 @@ namespace SCNS
             }
         }
 
-        protected void ImportFinishedValuesInDatabase(Utility utility, int TypeOfPaymentSelectedValue, int OrganizationSelectedValue, string FactureNumber, decimal Price, string Date, string Description, int Operater)
+        protected void ImportFinishedValuesInDatabase(Utility utility, int TypeOfPaymentSelectedValue, int OrganizationSelectedValue, string FactureNumber, decimal Price, string Date, string Description, int Operater, List<int> TipUslugeList)
         {
             try
             {
-                utility.upisiEksternoPlacanje(TypeOfPaymentSelectedValue, OrganizationSelectedValue, FactureNumber, Price, Date, Description, Operater);
-                ddlTypeOfPayment.SelectedValue = "0";
-                ddlorganization.SelectedValue = "0";
-                txtorganization.Text = string.Empty;
-                txtfacturenumber.Text = string.Empty;
-                txtprice.Text = string.Empty;
-                txtdate.Text = string.Empty;
-                txtdescription.Text = string.Empty;
+                int Result = 0;
+                utility.upisiEksternoPlacanje(TypeOfPaymentSelectedValue, OrganizationSelectedValue, FactureNumber, Price, Date, Description, Operater, TipUslugeList, out Result);
+                if (Result != 0)
+                {
+                    throw new Exception("Result from database is diferent from 0. Result is: " + Result);
+                }
+                else
+                {
+                    ddlTypeOfPayment.SelectedValue = "0";
+                    ddlorganization.SelectedValue = "0";
+                    txtorganization.Text = string.Empty;
+                    txtfacturenumber.Text = string.Empty;
+                    txtprice.Text = string.Empty;
+                    txtdate.Text = string.Empty;
+                    txtdescription.Text = string.Empty;
+                }   
             }
             catch (Exception ex)
             {
@@ -424,90 +477,6 @@ namespace SCNS
             cvdate.Enabled = action;
             cvAdd.Enabled = action;
         }
-        /*
-        protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
-        {
-            try
-            {
-                CustomValidatorActionAll(false);
-                SetBordersGray();
-                Utility utility = new Utility();
-                int row = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Value.ToString());
-                utility.obrisiRed(row);
-                log.Debug("Row with ID " + row + " has annulled column. ");
-                BindGridFinal(utility);
-                CustomValidatorAction(true);
-            }
-            catch (Exception ex)
-            {
-                log.Error("RowDeleting error. " + ex.Message);
-                ScriptManager.RegisterStartupScript(this, GetType(), "erroralert", "erroralert();", true);
-                CustomValidatorAction(true);
-            }
-        }
-        
-        protected void OnUpdate(object sender, EventArgs e)
-        {
-            try
-            {
-                CustomValidatorActionAll(false);
-                SetBordersGray();
-                Utility utility = new Utility();
-               
-                GridViewRow row = (sender as LinkButton).NamingContainer as GridViewRow;
-
-                //BoundField column IDEksternoPlacanje set to Visible=false
-                int rowIndex = ((sender as LinkButton).NamingContainer as GridViewRow).RowIndex;
-                //Get the value of column from the DataKeys using the RowIndex.
-                int lblIDEksternoPlacanje = Convert.ToInt32(GridView1.DataKeys[rowIndex].Values[0]);
-
-                //BoundField column IDEksternoPlacanje set to Visible=true
-                //int lblIDEksternoPlacanje = Convert.ToInt32((row.Cells[0].Controls[id] as TextBox).Text);
-
-                string txtBrojPlacanja = (row.Cells[3].Controls[0] as TextBox).Text;
-                string txtIznos = (row.Cells[4].Controls[0] as TextBox).Text;
-                string txtDatumPlacanja = (row.Cells[5].Controls[0] as TextBox).Text;
-                string txtDatumPlacanjaKonacno = string.Empty;
-                string FormatDateTime = "dd/MM/yyyy HH:mm:ss";
-                string FormatToString = "yyyy-MM-dd";
-                parceDateTime(txtDatumPlacanja, FormatDateTime, FormatToString, out txtDatumPlacanjaKonacno);
-                string txtOpis = (row.Cells[6].Controls[0] as TextBox).Text;
-                log.Debug("Row with ID " + lblIDEksternoPlacanje + " was UPDATED. " + txtBrojPlacanja + " " + txtIznos + " " + txtDatumPlacanjaKonacno + " " + txtOpis);
-                GridView1.EditIndex = -1;
-
-                utility.editujRed(txtBrojPlacanja, txtIznos, txtDatumPlacanjaKonacno, txtOpis, lblIDEksternoPlacanje);
-                //BindGridFinalUpdate(utility, txtBrojPlacanja, txtIznos, txtDatumPlacanjaKonacno, txtOpis);
-                CustomValidatorAction(true);
-            }
-            catch (Exception ex)
-            {
-                log.Error("RowEditing error. " + ex.Message);
-                ScriptManager.RegisterStartupScript(this, GetType(), "erroralert", "erroralert();", true);
-                CustomValidatorAction(true);
-            }
-        }
-
-        protected void GridView1_RowEditing(object sender, GridViewEditEventArgs e)
-        {
-            CustomValidatorActionAll(false);
-            SetBordersGray();
-            Utility utility = new Utility();
-            GridView1.EditIndex = e.NewEditIndex;
-            //BindGridFinal(utility);
-            CustomValidatorAction(true);
-        }
-
-        protected void OnCancel(object sender, EventArgs e)
-        {
-            CustomValidatorActionAll(false);
-            SetBordersGray();
-            Utility utility = new Utility();
-            GridView1.EditIndex = -1;
-            //BindGridFinal(utility);
-            CustomValidatorAction(true);
-            
-        }
-        */
 
         /*ONTEXTCHANGE*/
         protected void txtfacturenumber_TextChanged(object sender, EventArgs e)
@@ -672,6 +641,7 @@ namespace SCNS
                 myDiv3.Visible = true;
                 GridView1.Visible = false;
                 GridView2.Visible = true;
+                GridView2.DataBind();
             }
             catch (Exception ex)
             {
@@ -705,141 +675,92 @@ namespace SCNS
                 ScriptManager.RegisterStartupScript(this, GetType(), "erroralert", "erroralert();", true);
             }
         }
-        /*
-        protected void BindGridFinal(Utility utility) {
-            try
-            {
-                if (txtsearch.Text == string.Empty)
-                {
-                    BindGridView();
-                }
-                else
-                {
-                    BindSearchingGridView(txtsearch.Text);
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error in BindGridFinal. " + ex.Message);
-                throw new Exception("Error in BindGridFinal. " + ex.Message);
-            }
-        }
-
-        protected void BindGridFinalUpdate(Utility utility, string txtBrojPlacanja, string txtIznos, string txtDatumPlacanja, string txtOpis)
-        {
-            try
-            {
-                if (txtsearch.Text == string.Empty)
-                {
-                    BindGridView();
-                }
-                else
-                {
-                    BindSearchingGridViewUpdate(txtsearch.Text, txtBrojPlacanja, txtIznos, txtDatumPlacanja, txtOpis);
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error in BindGridFinalUpdate. " + ex.Message);
-                throw new Exception("Error in BindGridFinalUpdate. " + ex.Message);
-            }
-        }
-
-
-        protected void BindGridView()
-        {
-            try
-            {
-                Utility utility = new Utility();
-                DataTable dt = new DataTable();
-                utility.BindGridView(GridView1, out dt);
-
-                // BIND DATABASE WITH THE GRIDVIEW.
-                if (dt.Rows.Count > 0)
-                {
-                    GridView1.DataSource = dt;
-                    GridView1.DataBind();
-                    ViewState["dtEP"] = dt;
-                    ViewState["sortEP"] = "Asc";
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error while BindGridView. " + ex.Message);
-                throw new Exception("Error while BindGridView. " + ex.Message);
-            }
-        }
-
-        protected void BindSearchingGridView(string SelectedValue)
-        {
-            try
-            {
-                Utility utility = new Utility();
-                DataTable dt = new DataTable();
-                utility.BindSearchingGridView(GridView1, SelectedValue, out dt);
-
-                // BIND DATABASE WITH THE GRIDVIEW.
-                if (dt.Rows.Count > 0)
-                {
-                    GridView1.DataSource = dt;
-                    GridView1.DataBind();
-                    ViewState["dtEP"] = dt;
-                    ViewState["sortEP"] = "Asc";
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error while BindSearchingGridView. " + ex.Message);
-                throw new Exception("Error while BindSearchingGridView. " + ex.Message);
-            }
-        }
-
-        protected void BindSearchingGridViewUpdate(string SelectedValue, string txtBrojPlacanja, string txtIznos, string txtDatumPlacanja, string txtOpis)
-        {
-            try
-            {
-                Utility utility = new Utility();
-                DataTable dt = new DataTable();
-                utility.BindSearchingGridViewUpdate(GridView1, txtBrojPlacanja, txtIznos, txtDatumPlacanja, txtOpis, out dt);
-
-                // BIND DATABASE WITH THE GRIDVIEW.
-                if (dt.Rows.Count > 0)
-                {
-                    GridView1.DataSource = dt;
-                    GridView1.DataBind();
-                    ViewState["dtEP"] = dt;
-                    ViewState["sortEP"] = "Asc";
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error while BindSearchingGridViewUpdate. " + ex.Message);
-                throw new Exception("Error while BindSearchingGridViewUpdate. " + ex.Message);
-            }
-        }
-
         
-        protected void GridView1_Sorting(object sender, GridViewSortEventArgs e)
-        {
-            DataTable dt1 = (DataTable)ViewState["dtEP"];
 
-            if (dt1.Rows.Count > 0)
+        protected void GridView1_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            try
             {
-                if (Convert.ToString(ViewState["sortEP"]) == "Asc")
+                GridViewRow row = e.Row;
+                string strSort = string.Empty;
+
+                if (row.DataItem == null)
                 {
-                    dt1.DefaultView.Sort = e.SortExpression + " Desc";
-                    ViewState["sortEP"] = "Desc";
+                    return;
                 }
-                else
+
+                string IDEksternoPlacanje = ((DataRowView)e.Row.DataItem)["IDEksternoPlacanje"].ToString();
+
+
+                GridView gv = new GridView();
+                gv.ID = "_gridview" + row.UniqueID;
+                gv.Width = new Unit("100%");
+
+                SqlDataSource dsTemp = ChildDataSource(IDEksternoPlacanje);
+                if (dsTemp != null)
                 {
-                    dt1.DefaultView.Sort = e.SortExpression + " Asc";
-                    ViewState["sortEP"] = "Asc";
+                    gv.DataSource = dsTemp;
+                    gv.ShowHeader = false;
+                    gv.DataBind();
                 }
-                GridView1.DataSource = dt1;
-                GridView1.DataBind();
-                //Session["TableSortingEP"] = dt1.DefaultView.ToTable();
+
+                ((PlaceHolder)(row.FindControl("ph"))).Controls.Add(gv);
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error in GridView1_RowDataBound. " + ex.Message);
             }
         }
-        */
+
+        private SqlDataSource ChildDataSource(string idEksternoPlacanje)
+        {
+            string strQRY = "";
+            SqlDataSource dsTemp = new SqlDataSource();
+            dsTemp.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["SCNSPISConnectionString"].ToString();
+
+            strQRY = @"SELECT        dbo.blTipUsluge.TipUsluge
+FROM            dbo.blEksternoPlacanjeZaTipUsluge INNER JOIN
+                         dbo.blTipUsluge ON dbo.blEksternoPlacanjeZaTipUsluge.IDTipUsluge = dbo.blTipUsluge.IDTipUsluge
+WHERE        (dbo.blEksternoPlacanjeZaTipUsluge.IDEksternoPlacanje = " + idEksternoPlacanje + ")";
+
+            dsTemp.SelectCommand = strQRY;
+            return dsTemp;
+        }
+
+
+        protected void GridView2_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            try
+            {
+                GridViewRow row = e.Row;
+                string strSort = string.Empty;
+
+                if (row.DataItem == null)
+                {
+                    return;
+                }
+
+                string IDEksternoPlacanje = ((DataRowView)e.Row.DataItem)["IDEksternoPlacanje"].ToString();
+
+
+                GridView gv = new GridView();
+                gv.ID = "_gridview" + row.UniqueID;
+                gv.Width = new Unit("100%");
+
+                SqlDataSource dsTemp = ChildDataSource(IDEksternoPlacanje);
+                if (dsTemp != null)
+                {
+                    gv.DataSource = dsTemp;
+                    gv.ShowHeader = false;
+                    gv.DataBind();
+                }
+
+                ((PlaceHolder)(row.FindControl("ph"))).Controls.Add(gv);
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error in GridView1_RowDataBound. " + ex.Message);
+            }
+        }
     }
 }

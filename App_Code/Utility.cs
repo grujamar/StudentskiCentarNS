@@ -157,30 +157,50 @@ public class Utility
         }
     }
 
-    public void upisiEksternoPlacanje(int TypeOfPaymentSelectedValue, int OrganizationSelectedValue, string FactureNumber, decimal Price, string Date, string Description, int Operater)
+    public void upisiEksternoPlacanje(int TypeOfPaymentSelectedValue, int OrganizationSelectedValue, string FactureNumber, decimal Price, string Date, string Description, int Operater, List<int> TipUslugeList, out int result)
     {
         try
         {
             SqlConnection objConn = new SqlConnection(scnsconnectionstring);
-            SqlCommand objCmd = new SqlCommand(@"insert into blEksternoPlacanje (IDTipPlacanja, IDOrganizacija, DatumPlacanja, BrojPlacanja, Opis, Iznos, Operater) values (@TypeOfPaymentSelectedValue, @OrganizationSelectedValue, @Date, @FactureNumber, @Description, @Price, @Operater)", objConn);
-            objCmd.CommandType = System.Data.CommandType.Text;
+            SqlCommand objCmd = new SqlCommand("blSpEksternoPlacanjeInsert", objConn);
+            objCmd.CommandType = CommandType.StoredProcedure;
 
-            objCmd.Parameters.Add("@TypeOfPaymentSelectedValue", System.Data.SqlDbType.Int).Value = TypeOfPaymentSelectedValue;
-            objCmd.Parameters.Add("@OrganizationSelectedValue", System.Data.SqlDbType.Int).Value = OrganizationSelectedValue;
-            objCmd.Parameters.AddWithValue("@Date", Date);
-            objCmd.Parameters.AddWithValue("@FactureNumber", FactureNumber);
-            objCmd.Parameters.AddWithValue("@Description", Description);
-            objCmd.Parameters.Add("@Price", System.Data.SqlDbType.Decimal).Value = Price;
-            objCmd.Parameters.Add("@Operater", System.Data.SqlDbType.Int).Value = Operater;
+            using (var table = new DataTable())
+            {
+                table.Columns.Add("Item", typeof(int));
+                foreach (var item in TipUslugeList)
+                {
+                    table.Rows.Add(item);
+                }
+                    
+                objCmd.Parameters.Add("@IDTipPlacanja", System.Data.SqlDbType.Int).Value = TypeOfPaymentSelectedValue;
+                objCmd.Parameters.Add("@IDOrganizacija", System.Data.SqlDbType.Int).Value = OrganizationSelectedValue;
+                objCmd.Parameters.AddWithValue("@DatumPlacanja", Date);
+                objCmd.Parameters.AddWithValue("@BrojPlacanja", FactureNumber);
+                objCmd.Parameters.AddWithValue("@Opis", Description);
+                objCmd.Parameters.Add("@Iznos", System.Data.SqlDbType.Decimal).Value = Price;
+                objCmd.Parameters.Add("@Operater", System.Data.SqlDbType.Int).Value = Operater;
 
+                var TipUslugeListFinal = new SqlParameter("@ListaTipovaUsluga", SqlDbType.Structured);
+                TipUslugeListFinal.TypeName = "dbo.IntegerList";
+                TipUslugeListFinal.Value = table;
+
+                objCmd.Parameters.Add(TipUslugeListFinal);
+
+                objCmd.Parameters.Add("@err", System.Data.SqlDbType.Int);
+                objCmd.Parameters["@err"].Direction = ParameterDirection.ReturnValue;
+            }
             objConn.Open();
             objCmd.ExecuteNonQuery();
+
+            result = Convert.ToInt32(objCmd.Parameters["@err"].Value);
+
             objConn.Close();
         }
         catch (Exception ex)
         {
-            log.Error("Error while inserting All values. " + ex.Message);
-            throw new Exception("Error while inserting All values. " + ex.Message);
+            log.Error("Error while inserting All values in upisiEksternoPlacanje. " + ex.Message);
+            throw new Exception("Error while inserting All values in upisiEksternoPlacanje. " + ex.Message);
         }
     }
 

@@ -88,6 +88,25 @@ public static class Utils
         }
     }
 
+    public static bool ValidateListSize(int SelectedValue, out string ErrorMessage)
+    {
+        bool returnValue = true;
+        ErrorMessage = string.Empty;
+
+        if (SelectedValue == 0)
+        {
+            ErrorMessage = "Morate izabrati makar jedan tip usluge.";
+            returnValue = false;
+        }
+        else
+        {
+            ErrorMessage = string.Empty;
+            returnValue = true;
+        }
+
+        return returnValue;
+    }
+
     public static bool ValidateDate(DateTime datum, out string ErrorMessage1)
     {
         bool returnValue = true;

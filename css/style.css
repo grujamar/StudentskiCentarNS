@@ -148,7 +148,7 @@ html{
 
 /*GridView*/
 .section-gridview {
-    height: 750px;
+    min-height: 750px;
 }
 
 .container-grid {
@@ -169,6 +169,11 @@ html{
 }
 
 #GridView1 tr:hover {
+    background: #E84C3D; /*svaki red u body-u, hover sa nekom bojom, kada se prelazi*/
+    color: #fff;
+}
+
+#GridView2 tr:hover {
     background: #E84C3D; /*svaki red u body-u, hover sa nekom bojom, kada se prelazi*/
     color: #fff;
 }
@@ -204,4 +209,25 @@ footer a {
     color: #a53429;
     text-decoration: none;
     font-weight:bold;
+}
+
+
+.nested-gridview {
+    display: block;
+    position: relative;
+    left: 15px;
+    OVERFLOW: auto;
+    WIDTH: 65%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.nested-gridview-2 {
+    display: none;
+    position: relative;
+    left: 15px;
+    OVERFLOW: auto;
+    WIDTH: 65%;
+    margin: 0 auto;
+    text-align: center;
 }

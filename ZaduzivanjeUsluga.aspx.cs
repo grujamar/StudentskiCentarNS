@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Security.Cryptography;
 
 namespace SCNS
 {
@@ -20,7 +21,6 @@ namespace SCNS
         public string SetNothing = Constants.SetNothing;
         public string SetLightGray = Constants.SetLightGray;
 
-
         protected void Page_Load(object sender, EventArgs e)
         {
             Utility utility = new Utility();
@@ -32,16 +32,137 @@ namespace SCNS
             AvoidCashing();
             ShowDatepicker();
 
-            if (!Page.IsPostBack)
-            {
-                SetBordersGray();
-                myDiv2.Visible = true;
-                myDiv3.Visible = false;
-                CustomValidatorActionAll(true);
-                GridView2.Visible = false;
+            string encryptedParameters = Request.QueryString["d"];
 
-                log.Info("Aplication successfully start. ");
+            if ((encryptedParameters != string.Empty) && (encryptedParameters != null))
+            {
+                // replace encoded plus sign "%2b" with real plus sign +
+                encryptedParameters = encryptedParameters.Replace("%2b", "+");
+                string decryptedParameters = AuthenticatedEncryption.AuthenticatedEncryption.Decrypt(encryptedParameters, Constants.CryptKey, Constants.AuthKey);
+
+                HttpRequest req = new HttpRequest("", "http://www.pis.rs", decryptedParameters);
+
+                string data = req.QueryString["idOperater"];
+
+                if ((data != string.Empty) && (data != null))
+                {
+                    Session["Usluge-idOperater"] = data;
+                }
+                else
+                {
+                    Session["Usluge-idOperater"] = "0";
+                }
+
+                if (!Page.IsPostBack)
+                {
+                    if (Session["Usluge-idOperater"] != null)
+                    {
+                        int idOperater = Convert.ToInt32(Session["Usluge-idOperater"]);
+                        if (idOperater != 0)
+                        {
+                            SetBordersGray();
+                            myDiv2.Visible = true;
+                            myDiv3.Visible = false;
+                            CustomValidatorActionAll(true);
+                            GridView2.Visible = false;
+
+                            DisableDDLCashierWithOperator(idOperater, false);
+
+                            log.Info("Aplication successfully start. ");
+                        }
+                        else {
+                            encryptedParametersNullOrEmpty();
+                            log.Error("Error. idOperater is: " + encryptedParameters);
+                        }
+                    }
+                }
             }
+            else {
+                encryptedParametersNullOrEmpty();
+                log.Error("Error. encryptedParameters is null or string.empty. encryptedParameters is: " + encryptedParameters);
+            }
+        }
+
+        protected void encryptedParametersNullOrEmpty()
+        {
+            SetBordersGray();
+            myDiv2.Visible = true;
+            myDiv3.Visible = false;
+            CustomValidatorActionAll(true);
+            GridView2.Visible = false;
+        }
+
+        protected void DisableDDLCashierWithOperator(int idOperator, bool enabled)
+        {
+            cvCashier.Enabled = enabled;
+            ddlCashier.Enabled = enabled;
+            ddlCashier.SelectedValue = idOperator.ToString();
+            ddlCashier.BorderColor = ColorTranslator.FromHtml(SetGray);
+        }
+
+        protected void GetCertificateData(string data)
+        {
+            try
+            {
+                Dictionary<string, string> parameters = new Dictionary<string, string>();
+                parameters = ParseData(data);
+
+                foreach (var par in parameters)
+                {
+                    if (par.Key.Equals("idOperater", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        Session["Usluge-idOperater"] = par.Value;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Debug("Error in function GetCertificateData. " + ex.Message);
+            }
+        }
+
+        protected Dictionary<string, string> ParseData(string data)
+        {
+            try
+            {
+                Dictionary<string, string> parameterList = new Dictionary<string, string>();
+                //List<ReturnParameter> parameterList = new List<ReturnParameter>();
+
+                int temp1 = 0;
+                int temp2 = 0;
+
+                int start = 0;
+                do
+                {
+                    temp1 = data.IndexOf("|||", start);
+                    start = temp1 + 3;
+                    temp2 = data.IndexOf("|||", start);
+
+                    if (temp2 > 0)
+                    {
+                        string paramString = data.Substring(start, temp2 - temp1 - 3);
+                        string[] parameter = ParseParameter(paramString);
+                        parameterList.Add(parameter[0], parameter[1]);
+                    }
+                }
+                while (temp2 > 0);
+
+                return parameterList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Parameters format is not correct. " + ex.Message);
+            }
+        }
+
+        protected string[] ParseParameter(string param)
+        {
+            string[] parameter = new string[2];
+            int temp1 = param.IndexOf("=");
+            parameter[0] = param.Substring(0, temp1);
+            parameter[1] = param.Substring(temp1 + 1);
+
+            return parameter;
         }
         /*
         protected void BindGridView()
