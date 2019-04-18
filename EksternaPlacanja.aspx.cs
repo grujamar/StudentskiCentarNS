@@ -39,6 +39,7 @@ namespace SCNS
                 myDiv2.Visible = true;
                 myDiv3.Visible = false;
                 GridView2.Visible = false;
+                myDiv4.Visible = true;
                 CheckUncheckAll(false);
                 
                 log.Info("Aplication successfully start. ");
@@ -650,6 +651,7 @@ namespace SCNS
                 myDiv3.Visible = true;
                 GridView1.Visible = false;
                 GridView2.Visible = true;
+                myDiv4.Visible = false;
                 GridView2.DataBind();
             }
             catch (Exception ex)
