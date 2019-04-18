@@ -65,10 +65,11 @@ namespace SCNS
                             myDiv3.Visible = false;
                             CustomValidatorActionAll(true);
                             GridView2.Visible = false;
-
+                           
                             DisableDDLCashierWithOperator(idOperater, false);
-
-                            log.Info("Aplication successfully start. ");
+                            Session["Usluga-PunoIme"] = utility.getFullName(idOperater);
+                            btnSearch.Visible = false;
+                            log.Info("Aplication successfully start. Operater is: " + idOperater);
                         }
                         else {
                             encryptedParametersNullOrEmpty();
@@ -90,6 +91,9 @@ namespace SCNS
             myDiv3.Visible = false;
             CustomValidatorActionAll(true);
             GridView2.Visible = false;
+            GridView1.Visible = false;
+            btnSearch.Visible = false;
+            btnSubmit.Enabled = false;
         }
 
         protected void DisableDDLCashierWithOperator(int idOperator, bool enabled)
@@ -164,73 +168,7 @@ namespace SCNS
 
             return parameter;
         }
-        /*
-        protected void BindGridView()
-        {
-            try
-            {
-                Utility utility = new Utility();
-                DataTable dt = new DataTable();
-                utility.BindGridViewZaduzenja(GridView1, out dt);
 
-                // BIND DATABASE WITH THE GRIDVIEW.
-                if (dt.Rows.Count > 0)
-                {
-                    if (Session["TableSorting"].ToString() != string.Empty)
-                    {
-                        DataTable dt1 = (DataTable)Session["TableSorting"];
-                        GridView1.DataSource = dt1;
-                        GridView1.DataBind();
-                    }
-                    else
-                    {
-                        GridView1.DataSource = dt;
-                        GridView1.DataBind();
-                        ViewState["dt"] = dt;
-                        ViewState["sort"] = "Asc";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error while BindGridView. " + ex.Message);
-                throw new Exception("Error while BindGridView. " + ex.Message);
-            }
-        }
-
-        protected void BindSearchingGridView(string SelectedValue)
-        {
-            try
-            {
-                Utility utility = new Utility();
-                DataTable dt = new DataTable();
-                utility.BindSearchingGridViewZaduzenja(GridView1, SelectedValue, out dt);
-
-                // BIND DATABASE WITH THE GRIDVIEW.
-                if (dt.Rows.Count > 0)
-                {
-                    if (Session["TableSorting"].ToString() != string.Empty)
-                    {
-                        DataTable dt1 = (DataTable)Session["TableSorting"];
-                        GridView1.DataSource = dt1;
-                        GridView1.DataBind();
-                    }
-                    else
-                    {
-                        GridView1.DataSource = dt;
-                        GridView1.DataBind();
-                        ViewState["dt"] = dt;
-                        ViewState["sort"] = "Asc";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error while BindSearchingGridView. " + ex.Message);
-                throw new Exception("Error while BindSearchingGridView. " + ex.Message);
-            }
-        }
-        */
         private void AvoidCashing()
         {
             Response.Cache.SetNoStore();
@@ -362,8 +300,9 @@ namespace SCNS
             try
             {
                 utility.upisiZaduzenje(TypeOfServiceSelectedValue, CashierSelectedValue, Price, Date, Operater);
+                ddlType.SelectedValue = "0";
                 ddlTypeOfService.SelectedValue = "0";
-                ddlCashier.SelectedValue = "0";
+                ddlCashier.SelectedValue = Session["Usluge-idOperater"].ToString();
                 txtprice.Text = string.Empty;
                 txtdate.Text = string.Empty;
             }
@@ -417,6 +356,19 @@ namespace SCNS
             }
         }
 
+        protected void ddlType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int SelectedValue = Convert.ToInt32(ddlType.SelectedValue);
+            ddlTypeOfService.Items.Clear();
+            ddlTypeOfService.Items.Insert(0, new ListItem("--Izaberite--", "0"));
+            if (SelectedValue != 0)
+            {
+                ddlType.BorderColor = ColorTranslator.FromHtml(SetGray);
+                Session["Usluge-event_controle-DropDownList"] = ((DropDownList)sender);
+                SetFocusOnDropDownLists();
+            }
+        }
+
         protected void ddlTypeOfService_SelectedIndexChanged(object sender, EventArgs e)
         {
             int SelectedValue = Convert.ToInt32(ddlTypeOfService.SelectedValue);
@@ -425,6 +377,31 @@ namespace SCNS
                 ddlTypeOfService.BorderColor = ColorTranslator.FromHtml(SetGray);
                 Session["Usluge-event_controle-DropDownList"] = ((DropDownList)sender);
                 SetFocusOnDropDownLists();
+            }
+        }
+
+        protected void cvType_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            try
+            {
+                string ErrorMessage = string.Empty;
+                string IDItem = "0";
+
+                args.IsValid = Utils.ValidateType(ddlType.SelectedValue, IDItem, out ErrorMessage);
+                cvType.ErrorMessage = ErrorMessage;
+                if (!args.IsValid)
+                {
+                    ddlType.BorderColor = ColorTranslator.FromHtml(SetRed);
+                }
+                else
+                {
+                    ddlType.BorderColor = ColorTranslator.FromHtml(SetGray);
+                }
+            }
+            catch (Exception)
+            {
+                cvType.ErrorMessage = string.Empty;
+                args.IsValid = false;
             }
         }
 

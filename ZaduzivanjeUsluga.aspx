@@ -64,19 +64,38 @@
             <!--section submitform start-->
             <section class="submit py-4" runat="server" id="myDiv2">
                 <div class="container">
-                     <asp:UpdatePanel id="UpdatePanel2" runat="server">
+                    <asp:UpdatePanel id="UpdatePanel6" runat="server">
                         <ContentTemplate>
                             <fieldset>
                                 <div class="row" runat="server">
-                                    <!--div ddlTypeOfService start-->
+                                    <!--div ddlType start-->
                                     <div class="col-12 col-lg-2 mb-1 mb-md-4">
-                                        <asp:Label id="spanTypeOfService" runat="server" CssClass="submit-span">*</asp:Label><asp:Label id="lblTypeOfService" runat="server" CssClass="submit-label ml-2">Tip usluge:</asp:Label> 
+                                        <asp:Label id="lblType" runat="server" CssClass="submit-span">*</asp:Label><asp:Label id="Label2" runat="server" CssClass="submit-label ml-2">Tip usluge:</asp:Label> 
                                     </div>
                                     <div class="col-12 col-lg-5">
-                                        <asp:DropDownList ID="ddlTypeOfService" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="TipStavkeBlagajnickogIzvestaja" DataValueField="IDTipStavkeBlagajnickogIzvestaja" OnSelectedIndexChanged="ddlTypeOfService_SelectedIndexChanged" TabIndex="1" DataSourceID="dsTipUsluge">
+                                        <asp:DropDownList ID="ddlType" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="TipUsluge" DataValueField="IDTipUsluge" OnSelectedIndexChanged="ddlType_SelectedIndexChanged" TabIndex="1" DataSourceID="dsTipUslugeNovo">
                                         <asp:ListItem Selected="True" Value="0">--Izaberite--</asp:ListItem>
                                         </asp:DropDownList>                   
-                                        <asp:SqlDataSource ID="dsTipUsluge" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT IDTipStavkeBlagajnickogIzvestaja, TipStavkeBlagajnickogIzvestaja FROM blVMoguceStavkeZaZaduzivanje"></asp:SqlDataSource>
+                                        <asp:SqlDataSource ID="dsTipUslugeNovo" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT [IDTipUsluge], [TipUsluge] FROM [blTipUsluge]"></asp:SqlDataSource>
+                                    </div>
+                                    <div class="col-12 col-lg-5 mb-3 mb-lg-0">
+                                        <asp:CustomValidator runat="server" id="cvType" controltovalidate="ddlType" errormessage="" OnServerValidate="cvType_ServerValidate" CssClass="submit-customValidator" Display="Dynamic" ForeColor="Red" ValidateEmptyText="true" ValidationGroup="AddCustomValidatorToGroupZaduzenja"/>
+                                    </div><!--div ddlType end-->
+                                </div>
+                                <div class="row" runat="server">
+                                    <!--div ddlTypeOfService start-->
+                                    <div class="col-12 col-lg-2 mb-1 mb-md-4">
+                                        <asp:Label id="spanTypeOfService" runat="server" CssClass="submit-span">*</asp:Label><asp:Label id="lblTypeOfService" runat="server" CssClass="submit-label ml-2">Tip stavke:</asp:Label> 
+                                    </div>
+                                    <div class="col-12 col-lg-5">
+                                        <asp:DropDownList ID="ddlTypeOfService" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="TipStavkeBlagajnickogIzvestaja" DataValueField="IDTipStavkeBlagajnickogIzvestaja" OnSelectedIndexChanged="ddlTypeOfService_SelectedIndexChanged" TabIndex="2" DataSourceID="dsTipUsluge">
+                                        <asp:ListItem Selected="True" Value="0">--Izaberite--</asp:ListItem>
+                                        </asp:DropDownList>                   
+                                        <asp:SqlDataSource ID="dsTipUsluge" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT [IDTipStavkeBlagajnickogIzvestaja], [TipStavkeBlagajnickogIzvestaja], [IDTipUsluge] FROM [blVMoguceStavkeZaZaduzivanje] WHERE ([IDTipUsluge] = @IDTipUsluge)">
+                                            <SelectParameters>
+                                                <asp:ControlParameter ControlID="ddlType" Name="IDTipUsluge" PropertyName="SelectedValue" Type="Int32" />
+                                            </SelectParameters>
+                                        </asp:SqlDataSource>
                                     </div>
                                     <div class="col-12 col-lg-5 mb-3 mb-lg-0">
                                         <asp:CustomValidator runat="server" id="cvTypeOfService" controltovalidate="ddlTypeOfService" errormessage="" OnServerValidate="CvTypeOfService_ServerValidate" CssClass="submit-customValidator" Display="Dynamic" ForeColor="Red" ValidateEmptyText="true" ValidationGroup="AddCustomValidatorToGroupZaduzenja"/>
@@ -94,7 +113,7 @@
                                         <asp:Label id="spanCashier" runat="server" CssClass="submit-span">*</asp:Label><asp:Label id="lblCashier" runat="server" CssClass="submit-label ml-2">Osoba:</asp:Label> 
                                     </div>
                                     <div class="col-12 col-lg-5">
-                                        <asp:DropDownList ID="ddlCashier" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="PunoIme" DataValueField="IDOsoba" OnSelectedIndexChanged="ddlCashier_SelectedIndexChanged" DataSourceID="dsBlagajnice" TabIndex="2">
+                                        <asp:DropDownList ID="ddlCashier" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="PunoIme" DataValueField="IDOsoba" OnSelectedIndexChanged="ddlCashier_SelectedIndexChanged" DataSourceID="dsBlagajnice" TabIndex="3">
                                         <asp:ListItem Selected="True" Value="0">--Izaberite--</asp:ListItem>
                                         </asp:DropDownList>                      
                                         <asp:SqlDataSource ID="dsBlagajnice" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT IDOsoba, PunoIme FROM blVMoguciBlagajniciZaZaduzivanje"></asp:SqlDataSource>
@@ -115,7 +134,7 @@
                                         <asp:Label id="spanprice" runat="server" CssClass="submit-span">*</asp:Label><asp:Label id="lblprice" runat="server" CssClass="submit-label ml-2">Iznos:</asp:Label>
                                     </div>
                                     <div class="col-12 col-lg-5">
-                                        <asp:TextBox ID="txtprice" runat="server" CssClass="price-textbox" maxlength="8" TabIndex="3" ontextchanged="txtprice_TextChanged" AutoPostBack="true"></asp:TextBox>
+                                        <asp:TextBox ID="txtprice" runat="server" CssClass="price-textbox" maxlength="8" TabIndex="4" ontextchanged="txtprice_TextChanged" AutoPostBack="true"></asp:TextBox>
                                         <asp:Label id="priceexample" runat="server" CssClass="submit-example ml-2">Primer: 3.000 din</asp:Label>
                                     </div>
                                     <div class="col-12 col-lg-5 mb-3 mb-lg-0">
@@ -127,7 +146,7 @@
                                         <asp:Label id="spandate" runat="server" CssClass="submit-span">*</asp:Label><asp:Label id="lbldate" runat="server" CssClass="submit-label ml-2">Datum:</asp:Label>
                                     </div>
                                     <div class="col-12 col-lg-5">
-                                        <asp:TextBox ID="txtdate" runat="server" CssClass="price-textbox" maxlength="10" TabIndex="6" ontextchanged="txtdate_TextChanged" AutoPostBack="true"></asp:TextBox>
+                                        <asp:TextBox ID="txtdate" runat="server" CssClass="price-textbox" maxlength="10" TabIndex="5" ontextchanged="txtdate_TextChanged" AutoPostBack="true"></asp:TextBox>
                                         <asp:Label id="dateexample" runat="server" CssClass="submit-example ml-2">Primer: 21.09.2010</asp:Label>
                                     </div>
                                     <div class="col-12 col-lg-5 mb-3 mb-lg-0">
@@ -137,7 +156,7 @@
                                     <!--div button start-->
                                     <div class="col-12 col-md-2">
                                         <article class="py-3">
-                                            <asp:Button ID="btnSubmit" runat="server" Text="Upiši zaduživanje" CssClass="btn btn-danger save" OnClick="BtnSubmit_Click" TabIndex="4"/>
+                                            <asp:Button ID="btnSubmit" runat="server" Text="Upiši zaduživanje" CssClass="btn btn-danger save" OnClick="BtnSubmit_Click" TabIndex="6"/>
                                         </article>
                                     </div><!--div button end-->
                                </div>
@@ -186,12 +205,11 @@
                                     <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowHeaderWhenEmpty="True" Width="100%" DataKeyNames="IDStavkaBlagajnickogIzvestaja" style="margin-top: 0px" RowStyle-CssClass="rowHover" DataSourceID="dsGridView">
                                         <Columns>
                                             <asp:BoundField DataField="IDStavkaBlagajnickogIzvestaja" HeaderText="IDStavkaBlagajnickogIzvestaja" SortExpression="IDStavkaBlagajnickogIzvestaja" Visible="false"/>
-                                            <asp:BoundField DataField="PunoIme" HeaderText="Osoba" SortExpression="PunoIme" readonly="true"/>
-                                            <asp:BoundField DataField="TipStavkeBlagajnickogIzvestaja" HeaderText="Tip usluge" SortExpression="TipStavkeBlagajnickogIzvestaja" readonly="true"/>
-                                            <asp:BoundField DataField="Datum" HeaderText="Datum" SortExpression="Datum" DataFormatString="{0:dd-MM-yyyy}"/>
+                                            <asp:BoundField DataField="TipStavkeBlagajnickogIzvestaja" HeaderText="Tip stavke" SortExpression="TipStavkeBlagajnickogIzvestaja" readonly="true"/>
+                                            <asp:BoundField DataField="Datum" HeaderText="Datum" SortExpression="Datum" DataFormatString="{0:dd.MM.yyyy}"/>
                                             <asp:BoundField DataField="Iznos" HeaderText="Iznos" SortExpression="Iznos" />
-                                            <asp:BoundField DataField="KadaJeUpisano" HeaderText="Datum upisa" SortExpression="KadaJeUpisano" DataFormatString="{0:dd-MM-yyyy HH:mm:ss}" readonly="true"/>
-                                            <asp:BoundField DataField="Storno" HeaderText="Storno" SortExpression="Storno" DataFormatString="{0:dd-MM-yyyy HH:mm:ss}" readonly="true"/>
+                                            <asp:BoundField DataField="KadaJeUpisano" HeaderText="Datum upisa" SortExpression="KadaJeUpisano" DataFormatString="{0:dd.MM.yyyy HH:mm:ss}" readonly="true"/>
+                                            <asp:BoundField DataField="Storno" HeaderText="Storno" SortExpression="Storno" DataFormatString="{0:dd.MM.yyyy HH:mm:ss}" readonly="true"/>
                                             <asp:CommandField ShowDeleteButton="true" DeleteText="Poništi" ControlStyle-CssClass="link-style-gridview"/>
                                         </Columns>
                                         <FooterStyle BackColor="#333333" BorderColor="#333333" BorderWidth="2px" ForeColor="White" HorizontalAlign="Center" VerticalAlign="Middle" />
@@ -199,10 +217,13 @@
                                         <PagerStyle BackColor="#CCCCCC" BorderColor="#999999" ForeColor="#333333" HorizontalAlign="Center" VerticalAlign="Middle" />
                                         <RowStyle BackColor="Silver" BorderColor="Black" BorderWidth="1px" Font-Bold="False" Font-Names="Arial" ForeColor="Black" HorizontalAlign="Center" />
                                     </asp:GridView>
-                                    <asp:SqlDataSource ID="dsGridView" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT TOP (100) PERCENT IDStavkaBlagajnickogIzvestaja, PunoIme, TipStavkeBlagajnickogIzvestaja, Datum, Iznos, KadaJeUpisano, Storno FROM dbo.blVPregledUpisanihZaduzenja ORDER BY KadaJeUpisano DESC" DeleteCommand="blSpPonistavanjeZaduzenjaBlagajnika" DeleteCommandType="StoredProcedure">
+                                    <asp:SqlDataSource ID="dsGridView" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT TOP (100) PERCENT IDStavkaBlagajnickogIzvestaja, TipStavkeBlagajnickogIzvestaja, Datum, Iznos, KadaJeUpisano, Storno FROM blVPregledUpisanihZaduzenja WHERE (PunoIme = @punoime) ORDER BY KadaJeUpisano DESC" DeleteCommand="blSpPonistavanjeZaduzenjaBlagajnika" DeleteCommandType="StoredProcedure">
                                         <DeleteParameters>
                                             <asp:Parameter Name="IDStavkaBlagajnickogIzvestaja" Type="Int32" />
                                         </DeleteParameters>
+                                        <SelectParameters>
+                                            <asp:SessionParameter Name="punoime" SessionField="Usluga-PunoIme" />
+                                        </SelectParameters>
                                     </asp:SqlDataSource>
                                 </div>
                                 <div class="table-responsive">

@@ -19,7 +19,7 @@ public static class Utils
         ErrorMessage = string.Empty;
 
         if (FactureNumber == string.Empty){
-            ErrorMessage = "Broj fakture je obavezno polje. ";
+            ErrorMessage = "Broj plaćanja je obavezno polje. ";
             returnValue = false;
         }else if (!allowLettersNumbersMinusSlashSpace(FactureNumber)){
             ErrorMessage = "Moguće je uneti samo slova, cifre, minus, kosu crtu i razmak. ";
@@ -88,12 +88,12 @@ public static class Utils
         }
     }
 
-    public static bool ValidateListSize(int SelectedValue, out string ErrorMessage)
+    public static bool ValidateListSize(int ListSizeCount, out string ErrorMessage)
     {
         bool returnValue = true;
         ErrorMessage = string.Empty;
 
-        if (SelectedValue == 0)
+        if (ListSizeCount == 0)
         {
             ErrorMessage = "Morate izabrati makar jedan tip usluge.";
             returnValue = false;
@@ -159,6 +159,24 @@ public static class Utils
         return returnValue;
     }
 
+    public static bool ValidateType(string SelectedValue, string IDItem, out string ErrorMessage)
+    {
+        bool returnValue = true;
+        ErrorMessage = string.Empty;
+
+        if (SelectedValue == IDItem)
+        {
+            ErrorMessage = "Tip usluge je obavezno polje. ";
+            returnValue = false;
+        }
+        else
+        {
+            returnValue = true;
+        }
+
+        return returnValue;
+    }
+
     public static bool ValidateTypeOdService(string SelectedValue, string IDItem, out string ErrorMessage)
     {
         bool returnValue = true;
@@ -166,7 +184,7 @@ public static class Utils
 
         if (SelectedValue == IDItem)
         {
-            ErrorMessage = "Usluga je obavezno polje. ";
+            ErrorMessage = "Tip stavke je obavezno polje. ";
             returnValue = false;
         }
         else

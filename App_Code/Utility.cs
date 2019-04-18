@@ -429,6 +429,70 @@ public class Utility
             }
         }
     }
+
+
+    public void ponistavanjeEksternogPlacanja(int IDEksternogPlacanja, out int result)
+    {
+        try
+        {
+            SqlConnection objConn = new SqlConnection(scnsconnectionstring);
+            SqlCommand objCmd = new SqlCommand("blSpEksternoPlacanjeDelete", objConn);
+            objCmd.CommandType = CommandType.StoredProcedure;
+
+            objCmd.Parameters.Add("@IDEksternoPlacanje", System.Data.SqlDbType.Int).Value = IDEksternogPlacanja;
+
+            objCmd.Parameters.Add("@err", System.Data.SqlDbType.Int);
+            objCmd.Parameters["@err"].Direction = ParameterDirection.ReturnValue;
+
+            objConn.Open();
+            objCmd.ExecuteNonQuery();
+
+            //Retrieve the value of the output parameter
+            result = Convert.ToInt32(objCmd.Parameters["@err"].Value);
+
+            objConn.Close();
+        }
+        catch (Exception ex)
+        {
+            log.Error("Error in function ponistavanjePrisustva. " + ex.Message);
+            throw new Exception("Error in function ponistavanjePrisustva. " + ex.Message);
+        }
+    }
+
+
+    public string getFullName(int idOperater)
+    {
+        string PropertyValue = string.Empty;
+
+        string upit = @"SELECT        PunoIme
+                        FROM            dbo.blVMoguciBlagajniciZaZaduzivanje
+                        WHERE        (IDOsoba = @punoime)";
+
+        using (SqlConnection objConn = new SqlConnection(scnsconnectionstring))
+        {
+            using (SqlCommand objCmd = new SqlCommand(upit, objConn))
+            {
+                try
+                {
+                    objCmd.CommandType = System.Data.CommandType.Text;
+                    objCmd.Parameters.Add("@punoime", System.Data.SqlDbType.Int).Value = idOperater;
+                    objConn.Open();
+                    SqlDataReader reader = objCmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        PropertyValue = reader.GetString(0);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Error while getting PropertyValue in function getFullName. " + ex.Message);
+                    throw new Exception("Error while getting PropertyValue in function getFullName. " + ex.Message);
+                }
+            }
+        }
+
+        return PropertyValue;
+    }
     /*
     public List<WebControl> pronadjiKontrole(string page)
     {

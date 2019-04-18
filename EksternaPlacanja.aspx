@@ -228,47 +228,49 @@
                                             </div>
                                             <div class="col-12 col-lg-10">
                                                 <asp:TextBox ID="txtdescription" runat="server" CssClass="price-textbox" maxlength="250" TabIndex="7" TextMode="MultiLine" Rows="5"></asp:TextBox>
-                                            </div><!--div description end-->                                
-                                            <!--div button start-->
-                                            <div class="col-12 col-md-2">
-                                                <article class="py-3">
-                                                    <asp:Button ID="btnSubmit" runat="server" Text="Upiši eksterno plaćanje" CssClass="btn btn-danger save" OnClick="BtnSubmit_Click" TabIndex="8"/>
-                                                </article>
-                                            </div><!--div button end-->                           
+                                            </div><!--div description end-->                                                          
                                         </div>
                                     </fieldset>
                                 </ContentTemplate>
                             </asp:UpdatePanel>
                         </div>
                         <div class="col-12 col-md-3 mb-3 mb-md-0">
-                            <!--section checkbox start-->
-                            <section class="checkbox-section">
-                                <asp:Label 
-                                    ID="lbltipusluge"
-                                    runat="server" 
-                                    Text="Tip usluge" 
-                                    AssociatedControlID="CheckBoxList1"
-                                    Font-Underline="true"
-                                    Font-Bold="true"
-                                    Font-Size="Medium"
-                                    />
-                                <asp:CheckBoxList 
-                                    ID="CheckBoxList1"
-                                    runat="server"
-                                    Font-Italic="True"
-                                    Font-Names="Courier New"
-                                    Font-Size="Medium" DataSourceID="dsTipUsluge" DataTextField="TipUsluge" DataValueField="IDTipUsluge"
-                                    >
-                                    <asp:ListItem></asp:ListItem>
-                                </asp:CheckBoxList>
-                                <asp:SqlDataSource ID="dsTipUsluge" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT IDTipUsluge, TipUsluge FROM blVMoguciTipoviUslugeZaEksternoPlacanje">
-                                </asp:SqlDataSource>
-                                <asp:CustomValidator ID="cvCheckbox" runat="server" ErrorMessage="" Display="Dynamic" ForeColor="Red" CssClass="submit-customValidator" OnServerValidate="CheckBoxList1_ServerValidate" ValidationGroup="AddCustomValidatorToGroup"></asp:CustomValidator>
-                            </section><!--section checkbox end-->
+                            <asp:Label 
+                                ID="lbltipusluge"
+                                runat="server" 
+                                Text="Tip usluge" 
+                                AssociatedControlID="CheckBoxList1"
+                                Font-Underline="true"
+                                Font-Bold="true"
+                                Font-Size="Medium"
+                                />
+                            <asp:CheckBoxList 
+                                ID="CheckBoxList1"
+                                runat="server"
+                                Font-Italic="True"
+                                Font-Names="Courier New"
+                                Font-Size="Medium" DataSourceID="dsTipUsluge" DataTextField="TipUsluge" DataValueField="IDTipUsluge"
+                                >
+                            </asp:CheckBoxList>
+                            <asp:SqlDataSource ID="dsTipUsluge" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT IDTipUsluge, TipUsluge FROM blVMoguciTipoviUslugeZaEksternoPlacanje">
+                            </asp:SqlDataSource>
+                            <asp:CustomValidator ID="cvCheckbox" runat="server" ErrorMessage="" CssClass="submit-customValidator d-block" Display="Dynamic" ForeColor="Red" OnServerValidate="cvCheckbox_ServerValidation" ValidationGroup="AddCustomValidatorToGroup"></asp:CustomValidator>
                         </div>
                     </div>
                 </div>
             </section><!--section submitform end-->
+            <section>
+                <div class="container">
+                    <div class="row">
+                        <!--div button start-->
+                        <div class="col-12 col-md-2">
+                            <article class="py-3">
+                                <asp:Button ID="btnSubmit" runat="server" Text="Upiši eksterno plaćanje" CssClass="btn btn-danger save" OnClick="BtnSubmit_Click" TabIndex="8"/>
+                            </article>
+                        </div><!--div button end-->
+                    </div>
+                 </div>
+            </section>
             <!--section search start-->
             <section class="search-section py-1 py-md-2">
                 <div class="container">
@@ -306,7 +308,7 @@
                         <ContentTemplate>
                             <fieldset>
                                 <div class="table-responsive">
-                                    <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowHeaderWhenEmpty="True" Width="100%" DataKeyNames="IDEksternoPlacanje" style="margin-top: 0px" RowStyle-CssClass="rowHover" DataSourceID="dsGridViewEP" OnRowDataBound="GridView1_RowDataBound">
+                                    <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowHeaderWhenEmpty="True" Width="100%" DataKeyNames="IDEksternoPlacanje" style="margin-top: 0px" RowStyle-CssClass="rowHover" DataSourceID="dsGridViewEP" OnRowDataBound="GridView1_RowDataBound" OnRowCommand="GridView1_RowCommand">
                                         <Columns>
                                             <asp:TemplateField ShowHeader="False">
                                             <ItemTemplate>
@@ -321,12 +323,17 @@
                                             <asp:BoundField DataField="NazivOrganizacije" HeaderText="Naziv organizacije" SortExpression="NazivOrganizacije" readonly="true"/>
                                             <asp:BoundField DataField="BrojPlacanja" HeaderText="Broj plaćanja" SortExpression="BrojPlacanja" readonly="true"/>
                                             <asp:BoundField DataField="Iznos" HeaderText="Iznos" SortExpression="Iznos"/>
-                                            <asp:BoundField DataField="DatumPlacanja" HeaderText="Datum plaćanja" SortExpression="DatumPlacanja" DataFormatString="{0:dd-MM-yyyy}"/>
+                                            <asp:BoundField DataField="DatumPlacanja" HeaderText="Datum plaćanja" SortExpression="DatumPlacanja" DataFormatString="{0:dd.MM.yyyy}"/>
                                             <asp:BoundField DataField="Opis" HeaderText="Opis" SortExpression="Opis"/>
                                             <asp:BoundField DataField="Operater" HeaderText="Operater" SortExpression="Operater" readonly="true"/>
-                                            <asp:BoundField DataField="Ponisteno" HeaderText="Poništeno" SortExpression="Ponisteno" readonly="true" DataFormatString="{0:dd-MM-yyyy HH:mm:ss}"/>
+                                            <asp:BoundField DataField="Ponisteno" HeaderText="Poništeno" SortExpression="Ponisteno" readonly="true" DataFormatString="{0:dd.MM.yyyy HH:mm:ss}"/>
                                             <asp:CommandField CancelText="Odustani" EditText="Promeni" ShowEditButton="True" UpdateText="Upiši" ControlStyle-CssClass="link-style-gridview"/>
-                                            <asp:CommandField ShowDeleteButton="true" DeleteText="Poništi" ControlStyle-CssClass="link-style-gridview"/>
+                                            <asp:TemplateField>                                
+                                                <ItemTemplate>                                    
+                                                    <asp:Button ID="btnClear" runat="server" CommandName="DeleteProfile" ToolTip="Poništi" Text="Poništi" CommandArgument='<%# Container.DisplayIndex %>' CssClass="link-style-gridview" onclientclick="unhook()"/>                                 
+                                                </ItemTemplate>
+                                                <ItemStyle HorizontalAlign="Center" />
+                                            </asp:TemplateField>
                                             <asp:TemplateField ShowHeader="False">
                                             <ItemTemplate>
                                             <tr>
@@ -350,10 +357,9 @@
                          dbo.blOrganizacija ON dbo.blEksternoPlacanje.IDOrganizacija = dbo.blOrganizacija.IDOrganizacija INNER JOIN
                          dbo.pisTipPlacanja ON dbo.blEksternoPlacanje.IDTipPlacanja = dbo.pisTipPlacanja.IDTipPlacanja
                          ORDER BY dbo.blEksternoPlacanje.IDEksternoPlacanje DESC" OldValuesParameterFormatString="original_{0}"
-                                        UpdateCommand="UPDATE blEksternoPlacanje SET [BrojPlacanja] = @BrojPlacanja,[Iznos] = @Iznos,[DatumPlacanja] = @DatumPlacanja,[Opis] = @Opis WHERE [IDEksternoPlacanje] = @original_IDEksternoPlacanje"
+                                        UpdateCommand="UPDATE blEksternoPlacanje SET [Iznos] = @Iznos,[DatumPlacanja] = @DatumPlacanja,[Opis] = @Opis WHERE [IDEksternoPlacanje] = @original_IDEksternoPlacanje"
                                         DeleteCommand="UPDATE blEksternoPlacanje set [Ponisteno]=getDate() WHERE [IDEksternoPlacanje] = @original_IDEksternoPlacanje">
                                         <UpdateParameters>
-                                            <asp:Parameter Name="BrojPlacanja" Type="String" />
                                             <asp:Parameter Name="Iznos" Type="Decimal" />
                                             <asp:Parameter Name="DatumPlacanja" Type="DateTime" />
                                             <asp:Parameter Name="Opis" Type="String" />
@@ -365,7 +371,7 @@
                                     </asp:SqlDataSource>
                                 </div>
                                 <div class="table-responsive">
-                                    <asp:GridView ID="GridView2" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowHeaderWhenEmpty="True" Width="100%" DataKeyNames="IDEksternoPlacanje" style="margin-top: 0px" DataSourceID="dsGridViewEPFilter" OnRowDataBound="GridView2_RowDataBound" RowStyle-CssClass="rowHover">
+                                    <asp:GridView ID="GridView2" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowHeaderWhenEmpty="True" Width="100%" DataKeyNames="IDEksternoPlacanje" style="margin-top: 0px" DataSourceID="dsGridViewEPFilter" OnRowDataBound="GridView2_RowDataBound" RowStyle-CssClass="rowHover" OnRowCommand="GridView2_RowCommand">
                                         <Columns>
                                             <asp:TemplateField ShowHeader="False">
                                             <ItemTemplate>
@@ -380,12 +386,17 @@
                                             <asp:BoundField DataField="NazivOrganizacije" HeaderText="Naziv organizacije" SortExpression="NazivOrganizacije" readonly="true"/>
                                             <asp:BoundField DataField="BrojPlacanja" HeaderText="Broj plaćanja" SortExpression="BrojPlacanja" readonly="true"/>
                                             <asp:BoundField DataField="Iznos" HeaderText="Iznos" SortExpression="Iznos" />
-                                            <asp:BoundField DataField="DatumPlacanja" HeaderText="Datum plaćanja" SortExpression="DatumPlacanja" DataFormatString="{0:dd-MM-yyyy}"/>
+                                            <asp:BoundField DataField="DatumPlacanja" HeaderText="Datum plaćanja" SortExpression="DatumPlacanja" DataFormatString="{0:dd.MM.yyyy}"/>
                                             <asp:BoundField DataField="Opis" HeaderText="Opis" SortExpression="Opis" />
                                             <asp:BoundField DataField="Operater" HeaderText="Operater" SortExpression="Operater" readonly="true"/>
-                                            <asp:BoundField DataField="Ponisteno" HeaderText="Poništeno" SortExpression="Ponisteno" readonly="true" DataFormatString="{0:dd-MM-yyyy HH:mm:ss}"/>
+                                            <asp:BoundField DataField="Ponisteno" HeaderText="Poništeno" SortExpression="Ponisteno" readonly="true" DataFormatString="{0:dd.MM.yyyy HH:mm:ss}"/>
                                             <asp:CommandField CancelText="Odustani" EditText="Promeni" ShowEditButton="True" UpdateText="Upiši" ControlStyle-CssClass="link-style-gridview"/>
-                                            <asp:CommandField ShowDeleteButton="true" DeleteText="Poništi" ControlStyle-CssClass="link-style-gridview"/>
+                                            <asp:TemplateField>                                
+                                                <ItemTemplate>                                    
+                                                    <asp:Button ID="btnClear" runat="server" CommandName="DeleteProfile" ToolTip="Poništi" Text="Poništi" CommandArgument='<%# Container.DisplayIndex %>' CssClass="link-style-gridview" onclientclick="unhook()"/>                                 
+                                                </ItemTemplate>
+                                                <ItemStyle HorizontalAlign="Center" />
+                                            </asp:TemplateField>
                                             <asp:TemplateField ShowHeader="False">
                                             <ItemTemplate>
                                             <tr>
@@ -405,10 +416,9 @@
                                     </asp:GridView>
                                     <asp:SqlDataSource ID="dsGridViewEPFilter" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT TOP (100) PERCENT blEksternoPlacanje.IDEksternoPlacanje, blEksternoPlacanje.DatumPlacanja, blEksternoPlacanje.BrojPlacanja, blEksternoPlacanje.Opis, blEksternoPlacanje.Iznos, blEksternoPlacanje.Operater, blOrganizacija.NazivOrganizacije, pisTipPlacanja.TipPlacanja, blEksternoPlacanje.Ponisteno FROM blEksternoPlacanje INNER JOIN blOrganizacija ON blEksternoPlacanje.IDOrganizacija = blOrganizacija.IDOrganizacija INNER JOIN pisTipPlacanja ON blEksternoPlacanje.IDTipPlacanja = pisTipPlacanja.IDTipPlacanja ORDER BY blEksternoPlacanje.IDEksternoPlacanje DESC"
                                         FilterExpression="BrojPlacanja LIKE '%{0}%'" OldValuesParameterFormatString="original_{0}"
-                                        UpdateCommand="UPDATE blEksternoPlacanje SET [BrojPlacanja] = @BrojPlacanja,[Iznos] = @Iznos,[DatumPlacanja] = @DatumPlacanja,[Opis] = @Opis WHERE [IDEksternoPlacanje] = @original_IDEksternoPlacanje"
+                                        UpdateCommand="UPDATE blEksternoPlacanje SET [Iznos] = @Iznos,[DatumPlacanja] = @DatumPlacanja,[Opis] = @Opis WHERE [IDEksternoPlacanje] = @original_IDEksternoPlacanje"
                                         DeleteCommand="UPDATE blEksternoPlacanje set [Ponisteno]=getDate() WHERE [IDEksternoPlacanje] = @original_IDEksternoPlacanje">
                                         <UpdateParameters>
-                                            <asp:Parameter Name="BrojPlacanja" Type="String" />
                                             <asp:Parameter Name="Iznos" Type="Decimal" />
                                             <asp:Parameter Name="DatumPlacanja" Type="DateTime" />
                                             <asp:Parameter Name="Opis" Type="String" />

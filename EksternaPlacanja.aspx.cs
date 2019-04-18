@@ -39,7 +39,8 @@ namespace SCNS
                 myDiv2.Visible = true;
                 myDiv3.Visible = false;
                 GridView2.Visible = false;
-
+                CheckUncheckAll(false);
+                
                 log.Info("Aplication successfully start. ");
             }
         }
@@ -192,30 +193,23 @@ namespace SCNS
             }
         }
 
-        protected void CheckBoxList1_ServerValidate(object source, ServerValidateEventArgs args)
+        protected void cvCheckbox_ServerValidation(object source, ServerValidateEventArgs args)
         {
             try
             {
-                string ErrorMessage = string.Empty;
-
-                // Create the list to store.
+                string ErrorMessageFinal = string.Empty;
                 List<string> CheckBoxList = new List<string>();
-                // Loop through each item.
+
                 foreach (ListItem item in CheckBoxList1.Items)
                 {
                     if (item.Selected)
                     {
-                        // If the item is selected, add the value to the list.
                         CheckBoxList.Add(item.Value);
-                    }
-                    else
-                    {
-                        // Item is not selected, do something else.
                     }
                 }
                 int sizeOfList = CheckBoxList.Count;
-                args.IsValid = Utils.ValidateListSize(sizeOfList, out ErrorMessage);
-                cvCheckbox.ErrorMessage = ErrorMessage;
+                args.IsValid = Utils.ValidateListSize(sizeOfList, out ErrorMessageFinal);
+                cvCheckbox.ErrorMessage = ErrorMessageFinal;
             }
             catch (Exception)
             {
@@ -310,7 +304,8 @@ namespace SCNS
                     GridView1.DataBind();
                     errLabel3.Text = string.Empty;
                 }
-                else if (!Page.IsValid){
+                else if (!Page.IsValid)
+                {
                     ScriptManager.RegisterStartupScript(this, GetType(), "erroralert", "erroralert();", true);
                     GridView1.DataBind();
                 }
@@ -434,11 +429,20 @@ namespace SCNS
                     txtprice.Text = string.Empty;
                     txtdate.Text = string.Empty;
                     txtdescription.Text = string.Empty;
+                    CheckUncheckAll(false);
                 }   
             }
             catch (Exception ex)
             {
                 throw new Exception("Error while importing All values in database. " + ex.Message);
+            }
+        }
+
+        protected void CheckUncheckAll(bool tf)
+        {
+            foreach (ListItem item in CheckBoxList1.Items)
+            {
+                item.Selected = tf;
             }
         }
         /*
@@ -465,6 +469,7 @@ namespace SCNS
             cvfacturenumber.Enabled = action;
             cvprice.Enabled = action;
             cvdate.Enabled = action;
+            cvCheckbox.Enabled = action;
             cvAdd.Enabled = !action;
         }
 
@@ -475,6 +480,7 @@ namespace SCNS
             cvfacturenumber.Enabled = action;
             cvprice.Enabled = action;
             cvdate.Enabled = action;
+            cvCheckbox.Enabled = action;
             cvAdd.Enabled = action;
         }
 
@@ -482,6 +488,7 @@ namespace SCNS
         protected void txtfacturenumber_TextChanged(object sender, EventArgs e)
         {
             CheckIfChannelHasChanged();
+            GridView1.DataBind();
         }
 
         private void CheckIfChannelHasChanged()
@@ -513,6 +520,7 @@ namespace SCNS
         protected void txtprice_TextChanged(object sender, EventArgs e)
         {
             CheckIfChannelHasChanged1();
+            GridView1.DataBind();
         }
 
         private void CheckIfChannelHasChanged1()
@@ -544,6 +552,7 @@ namespace SCNS
         protected void txtdate_TextChanged(object sender, EventArgs e)
         {
             CheckIfChannelHasChanged2();
+            GridView1.DataBind();
         }
 
         private void CheckIfChannelHasChanged2()
@@ -690,7 +699,17 @@ namespace SCNS
                 }
 
                 string IDEksternoPlacanje = ((DataRowView)e.Row.DataItem)["IDEksternoPlacanje"].ToString();
+                string Ponisteno = ((DataRowView)e.Row.DataItem)["Ponisteno"].ToString();
+                Button controlButton = (Button)e.Row.FindControl("btnClear");
 
+                if (Ponisteno != null && Ponisteno != string.Empty)
+                {
+                    controlButton.Enabled = false;
+                    controlButton.BackColor = ColorTranslator.FromHtml(SetGray);
+                }
+                else {
+                    controlButton.Enabled = true;
+                }
 
                 GridView gv = new GridView();
                 gv.ID = "_gridview" + row.UniqueID;
@@ -709,6 +728,7 @@ namespace SCNS
             catch (Exception ex)
             {
                 log.Error("Error in GridView1_RowDataBound. " + ex.Message);
+                GridView1.DataBind();
             }
         }
 
@@ -741,7 +761,18 @@ WHERE        (dbo.blEksternoPlacanjeZaTipUsluge.IDEksternoPlacanje = " + idEkste
                 }
 
                 string IDEksternoPlacanje = ((DataRowView)e.Row.DataItem)["IDEksternoPlacanje"].ToString();
+                string Ponisteno = ((DataRowView)e.Row.DataItem)["Ponisteno"].ToString();
+                Button controlButton = (Button)e.Row.FindControl("btnClear");
 
+                if (Ponisteno != null && Ponisteno != string.Empty)
+                {
+                    controlButton.Enabled = false;
+                    controlButton.BackColor = ColorTranslator.FromHtml(SetGray);
+                }
+                else
+                {
+                    controlButton.Enabled = true;
+                }
 
                 GridView gv = new GridView();
                 gv.ID = "_gridview" + row.UniqueID;
@@ -759,8 +790,71 @@ WHERE        (dbo.blEksternoPlacanjeZaTipUsluge.IDEksternoPlacanje = " + idEkste
             }
             catch (Exception ex)
             {
-                log.Error("Error in GridView1_RowDataBound. " + ex.Message);
+                log.Error("Error in GridView2_RowDataBound. " + ex.Message);
+                GridView2.DataBind();
             }
         }
+
+        protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            try
+            {
+                if (e.CommandName.Equals("DeleteProfile"))
+                {
+                    int rowno = Convert.ToInt32(e.CommandArgument);
+                    int IDEksternoPlacanje = Convert.ToInt32(GridView1.DataKeys[rowno]["IDEksternoPlacanje"]);
+                    int Result = 0;
+
+                    Utility utility = new Utility();
+                    utility.ponistavanjeEksternogPlacanja(IDEksternoPlacanje, out Result);
+                    log.Debug("Ponistavanje eksternog placanja Grid1 : " + " RowNo - " + rowno + " IDEksternoPlacanje - " + IDEksternoPlacanje + " " + ". Rezultat - " + Result);
+
+                    if (Result != 0)
+                    {
+                        throw new Exception("Result from database is diferent from 0. Result is: " + Result);
+                    }
+
+                    GridView1.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Clear GW button error. " + ex.Message);
+                GridView1.DataBind();
+            }
+        }
+
+        protected void GridView2_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            try
+            {
+                if (e.CommandName.Equals("DeleteProfile"))
+                {
+                    int rowno = Convert.ToInt32(e.CommandArgument);
+                    int IDEksternoPlacanje = Convert.ToInt32(GridView2.DataKeys[rowno]["IDEksternoPlacanje"]);
+                    int Result = 0;
+
+                    Utility utility = new Utility();
+                    utility.ponistavanjeEksternogPlacanja(IDEksternoPlacanje, out Result);
+                    log.Debug("Ponistavanje eksternog placanja Grid2 : " + " RowNo - " + rowno + " IDEksternoPlacanje - " + IDEksternoPlacanje + " " + ". Rezultat - " + Result);
+                    if (Result != 0)
+                    {
+
+                        throw new Exception("Result from database is diferent from 0. Result is: " + Result);
+                    }
+                    else
+                    {
+
+                    }
+                    GridView2.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Clear GW button error. " + ex.Message);
+                GridView2.DataBind();
+            }
+        }
+
     }
 }
