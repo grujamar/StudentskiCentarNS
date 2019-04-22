@@ -12,7 +12,7 @@
             <!---->
 			<!--header navigation start-->
 			<div class="collapse navbar-collapse" id="main-menu">
-                <div class="navbar-nav ml-auto mt-2 px-lg-5">
+                <div class="navbar-nav ml-auto px-lg-5">
                     <span id="lbl_Timer" style="font-size:21px;">Stranica ažurirana: <span id="date" style="font-size:21px;"></span>
                         <script>
                             var d = new Date();
