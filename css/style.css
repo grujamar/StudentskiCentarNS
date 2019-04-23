@@ -3,6 +3,10 @@ html{
     font-size: 14px;
 }
 
+.mycheckbox input[type="checkbox"] {
+    margin-right: 5px;
+}
+
 /*HEADER START*/
 .navbar-container .logo-image {
     height: 70px;

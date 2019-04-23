@@ -247,8 +247,10 @@
                             <asp:CheckBoxList 
                                 ID="CheckBoxList1"
                                 runat="server"
-                                Font-Italic="True"
+                                Font-Italic="False"
+                                Font-Bold="true"
                                 Font-Names="Courier New"
+                                CssClass="mycheckbox"
                                 Font-Size="Medium" DataSourceID="dsTipUsluge" DataTextField="TipUsluge" DataValueField="IDTipUsluge"
                                 >
                             </asp:CheckBoxList>
@@ -325,7 +327,7 @@
                                             <asp:BoundField DataField="Iznos" HeaderText="Iznos" SortExpression="Iznos"/>
                                             <asp:BoundField DataField="DatumPlacanja" HeaderText="Datum plaćanja" SortExpression="DatumPlacanja" DataFormatString="{0:dd.MM.yyyy}"/>
                                             <asp:BoundField DataField="Opis" HeaderText="Opis" SortExpression="Opis"/>
-                                            <asp:BoundField DataField="Operater" HeaderText="Operater" SortExpression="Operater" readonly="true"/>
+                                            <asp:BoundField DataField="Operater" HeaderText="Operater" SortExpression="Operater" readonly="true" Visible="false"/>
                                             <asp:BoundField DataField="Ponisteno" HeaderText="Poništeno" SortExpression="Ponisteno" readonly="true" DataFormatString="{0:dd.MM.yyyy HH:mm:ss}"/>
                                             <asp:CommandField CancelText="Odustani" EditText="Promeni" ShowEditButton="True" UpdateText="Upiši" ControlStyle-CssClass="link-style-gridview"/>
                                             <asp:TemplateField>                                
@@ -388,7 +390,7 @@
                                             <asp:BoundField DataField="Iznos" HeaderText="Iznos" SortExpression="Iznos" />
                                             <asp:BoundField DataField="DatumPlacanja" HeaderText="Datum plaćanja" SortExpression="DatumPlacanja" DataFormatString="{0:dd.MM.yyyy}"/>
                                             <asp:BoundField DataField="Opis" HeaderText="Opis" SortExpression="Opis" />
-                                            <asp:BoundField DataField="Operater" HeaderText="Operater" SortExpression="Operater" readonly="true"/>
+                                            <asp:BoundField DataField="Operater" HeaderText="Operater" SortExpression="Operater" readonly="true" Visible="false"/>
                                             <asp:BoundField DataField="Ponisteno" HeaderText="Poništeno" SortExpression="Ponisteno" readonly="true" DataFormatString="{0:dd.MM.yyyy HH:mm:ss}"/>
                                             <asp:CommandField CancelText="Odustani" EditText="Promeni" ShowEditButton="True" UpdateText="Upiši" ControlStyle-CssClass="link-style-gridview"/>
                                             <asp:TemplateField>                                
