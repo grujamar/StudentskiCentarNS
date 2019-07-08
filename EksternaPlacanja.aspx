@@ -105,7 +105,7 @@
                                                         <asp:DropDownList ID="ddlTypeOfPayment" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="TipPlacanja" DataValueField="IDTipPlacanja" OnSelectedIndexChanged="ddlTypeOfPayment_SelectedIndexChanged" DataSourceID="dsTipPlacanja" TabIndex="1">
                                                         <asp:ListItem Selected="True" Value="0">--Izaberite--</asp:ListItem>
                                                         </asp:DropDownList>                   
-                                                        <asp:SqlDataSource ID="dsTipPlacanja" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT [IDTipPlacanja], [TipPlacanja] FROM [blVMoguciTipoviEksternogPlacanja]"></asp:SqlDataSource>
+                                                        <asp:SqlDataSource ID="dsTipPlacanja" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSConnectionString %>" SelectCommand="SELECT [IDTipPlacanja], [TipPlacanja] FROM [blVMoguciTipoviEksternogPlacanja]"></asp:SqlDataSource>
                                                     </div>
                                                     <div class="col-12 mb-1">
                                                         <asp:CustomValidator runat="server" id="cvTypeOfPayment" controltovalidate="ddlTypeOfPayment" errormessage="" OnServerValidate="CvTypeOfPayment_ServerValidate" CssClass="submit-customValidator" Display="Dynamic" ForeColor="Red" ValidateEmptyText="true" ValidationGroup="AddCustomValidatorToGroup"/>
@@ -130,7 +130,7 @@
                                                         <asp:DropDownList ID="ddlorganization" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="NazivOrganizacije" DataValueField="IDOrganizacija" OnSelectedIndexChanged="ddlorganization_SelectedIndexChanged" DataSourceID="dsOrganization" TabIndex="2">
                                                         <asp:ListItem Selected="True" Value="0">--Izaberite--</asp:ListItem>
                                                         </asp:DropDownList>
-                                                        <asp:SqlDataSource ID="dsOrganization" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT [NazivOrganizacije], [IDOrganizacija] FROM [blOrganizacija]"></asp:SqlDataSource>                      
+                                                        <asp:SqlDataSource ID="dsOrganization" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSConnectionString %>" SelectCommand="SELECT [NazivOrganizacije], [IDOrganizacija] FROM [blOrganizacija]"></asp:SqlDataSource>                      
                                                     </div>
                                                     <div class="col-12 mb-1">
                                                         <asp:CustomValidator runat="server" id="cvorganization" controltovalidate="ddlorganization" errormessage="" OnServerValidate="Cvorganization_ServerValidate" CssClass="submit-customValidator" Display="Dynamic" ForeColor="Red" ValidateEmptyText="true" ValidationGroup="AddCustomValidatorToGroup"/>
@@ -254,7 +254,7 @@
                                 Font-Size="Medium" DataSourceID="dsTipUsluge" DataTextField="TipUsluge" DataValueField="IDTipUsluge"
                                 >
                             </asp:CheckBoxList>
-                            <asp:SqlDataSource ID="dsTipUsluge" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT IDTipUsluge, TipUsluge FROM blVMoguciTipoviUslugeZaEksternoPlacanje">
+                            <asp:SqlDataSource ID="dsTipUsluge" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSConnectionString %>" SelectCommand="SELECT IDTipUsluge, TipUsluge FROM blVMoguciTipoviUslugeZaEksternoPlacanje">
                             </asp:SqlDataSource>
                             <asp:CustomValidator ID="cvCheckbox" runat="server" ErrorMessage="" CssClass="submit-customValidator d-block" Display="Dynamic" ForeColor="Red" OnServerValidate="cvCheckbox_ServerValidation" ValidationGroup="AddCustomValidatorToGroup"></asp:CustomValidator>
                         </div>
@@ -353,7 +353,7 @@
                                         <PagerStyle BackColor="#CCCCCC" BorderColor="#999999" ForeColor="#333333" HorizontalAlign="Center" VerticalAlign="Middle" />
                                         <RowStyle BackColor="Silver" BorderColor="Black" BorderWidth="1px" Font-Bold="False" Font-Names="Arial" ForeColor="Black" HorizontalAlign="Center" />
                                     </asp:GridView>
-                                    <asp:SqlDataSource ID="dsGridViewEP" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT        TOP (100) PERCENT dbo.blEksternoPlacanje.IDEksternoPlacanje, dbo.blEksternoPlacanje.DatumPlacanja, dbo.blEksternoPlacanje.BrojPlacanja, dbo.blEksternoPlacanje.Opis, dbo.blEksternoPlacanje.Iznos, 
+                                    <asp:SqlDataSource ID="dsGridViewEP" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSConnectionString %>" SelectCommand="SELECT        TOP (100) PERCENT dbo.blEksternoPlacanje.IDEksternoPlacanje, dbo.blEksternoPlacanje.DatumPlacanja, dbo.blEksternoPlacanje.BrojPlacanja, dbo.blEksternoPlacanje.Opis, dbo.blEksternoPlacanje.Iznos, 
                                                      dbo.blEksternoPlacanje.Operater, dbo.blOrganizacija.NazivOrganizacije, dbo.pisTipPlacanja.TipPlacanja, dbo.blEksternoPlacanje.Ponisteno
                             FROM            dbo.blEksternoPlacanje INNER JOIN
                          dbo.blOrganizacija ON dbo.blEksternoPlacanje.IDOrganizacija = dbo.blOrganizacija.IDOrganizacija INNER JOIN
@@ -416,7 +416,7 @@
                                         <PagerStyle BackColor="#CCCCCC" BorderColor="#999999" ForeColor="#333333" HorizontalAlign="Center" VerticalAlign="Middle" />
                                         <RowStyle BackColor="Silver" BorderColor="Black" BorderWidth="1px" Font-Bold="False" Font-Names="Arial" ForeColor="Black" HorizontalAlign="Center" />
                                     </asp:GridView>
-                                    <asp:SqlDataSource ID="dsGridViewEPFilter" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT TOP (100) PERCENT blEksternoPlacanje.IDEksternoPlacanje, blEksternoPlacanje.DatumPlacanja, blEksternoPlacanje.BrojPlacanja, blEksternoPlacanje.Opis, blEksternoPlacanje.Iznos, blEksternoPlacanje.Operater, blOrganizacija.NazivOrganizacije, pisTipPlacanja.TipPlacanja, blEksternoPlacanje.Ponisteno FROM blEksternoPlacanje INNER JOIN blOrganizacija ON blEksternoPlacanje.IDOrganizacija = blOrganizacija.IDOrganizacija INNER JOIN pisTipPlacanja ON blEksternoPlacanje.IDTipPlacanja = pisTipPlacanja.IDTipPlacanja ORDER BY blEksternoPlacanje.IDEksternoPlacanje DESC"
+                                    <asp:SqlDataSource ID="dsGridViewEPFilter" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSConnectionString %>" SelectCommand="SELECT TOP (100) PERCENT blEksternoPlacanje.IDEksternoPlacanje, blEksternoPlacanje.DatumPlacanja, blEksternoPlacanje.BrojPlacanja, blEksternoPlacanje.Opis, blEksternoPlacanje.Iznos, blEksternoPlacanje.Operater, blOrganizacija.NazivOrganizacije, pisTipPlacanja.TipPlacanja, blEksternoPlacanje.Ponisteno FROM blEksternoPlacanje INNER JOIN blOrganizacija ON blEksternoPlacanje.IDOrganizacija = blOrganizacija.IDOrganizacija INNER JOIN pisTipPlacanja ON blEksternoPlacanje.IDTipPlacanja = pisTipPlacanja.IDTipPlacanja ORDER BY blEksternoPlacanje.IDEksternoPlacanje DESC"
                                         FilterExpression="BrojPlacanja LIKE '%{0}%'" OldValuesParameterFormatString="original_{0}"
                                         UpdateCommand="UPDATE blEksternoPlacanje SET [Iznos] = @Iznos,[DatumPlacanja] = @DatumPlacanja,[Opis] = @Opis WHERE [IDEksternoPlacanje] = @original_IDEksternoPlacanje"
                                         DeleteCommand="UPDATE blEksternoPlacanje set [Ponisteno]=getDate() WHERE [IDEksternoPlacanje] = @original_IDEksternoPlacanje">

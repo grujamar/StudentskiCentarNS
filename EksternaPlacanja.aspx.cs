@@ -738,7 +738,7 @@ namespace SCNS
         {
             string strQRY = "";
             SqlDataSource dsTemp = new SqlDataSource();
-            dsTemp.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["SCNSPISConnectionString"].ToString();
+            dsTemp.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["SCNSConnectionString"].ToString();
 
             strQRY = @"SELECT        dbo.blTipUsluge.TipUsluge
 FROM            dbo.blEksternoPlacanjeZaTipUsluge INNER JOIN

@@ -76,7 +76,7 @@
                                         <asp:DropDownList ID="ddlType" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="TipUsluge" DataValueField="IDTipUsluge" OnSelectedIndexChanged="ddlType_SelectedIndexChanged" TabIndex="1" DataSourceID="dsTipUslugeNovo">
                                         <asp:ListItem Selected="True" Value="0">--Izaberite--</asp:ListItem>
                                         </asp:DropDownList>                   
-                                        <asp:SqlDataSource ID="dsTipUslugeNovo" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT [IDTipUsluge], [TipUsluge] FROM [blTipUsluge]"></asp:SqlDataSource>
+                                        <asp:SqlDataSource ID="dsTipUslugeNovo" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSConnectionString %>" SelectCommand="SELECT [IDTipUsluge], [TipUsluge] FROM [blTipUsluge]"></asp:SqlDataSource>
                                     </div>
                                     <div class="col-12 col-lg-5 mb-3 mb-lg-0">
                                         <asp:CustomValidator runat="server" id="cvType" controltovalidate="ddlType" errormessage="" OnServerValidate="cvType_ServerValidate" CssClass="submit-customValidator" Display="Dynamic" ForeColor="Red" ValidateEmptyText="true" ValidationGroup="AddCustomValidatorToGroupZaduzenja"/>
@@ -91,7 +91,7 @@
                                         <asp:DropDownList ID="ddlTypeOfService" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="TipStavkeBlagajnickogIzvestaja" DataValueField="IDTipStavkeBlagajnickogIzvestaja" OnSelectedIndexChanged="ddlTypeOfService_SelectedIndexChanged" TabIndex="2" DataSourceID="dsTipUsluge">
                                         <asp:ListItem Selected="True" Value="0">--Izaberite--</asp:ListItem>
                                         </asp:DropDownList>                   
-                                        <asp:SqlDataSource ID="dsTipUsluge" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT [IDTipStavkeBlagajnickogIzvestaja], [TipStavkeBlagajnickogIzvestaja], [IDTipUsluge] FROM [blVMoguceStavkeZaZaduzivanje] WHERE ([IDTipUsluge] = @IDTipUsluge)">
+                                        <asp:SqlDataSource ID="dsTipUsluge" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSConnectionString %>" SelectCommand="SELECT [IDTipStavkeBlagajnickogIzvestaja], [TipStavkeBlagajnickogIzvestaja], [IDTipUsluge] FROM [blVMoguceStavkeZaZaduzivanje] WHERE ([IDTipUsluge] = @IDTipUsluge)">
                                             <SelectParameters>
                                                 <asp:ControlParameter ControlID="ddlType" Name="IDTipUsluge" PropertyName="SelectedValue" Type="Int32" />
                                             </SelectParameters>
@@ -116,7 +116,7 @@
                                         <asp:DropDownList ID="ddlCashier" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="submit-dropdownlist" DataTextField="PunoIme" DataValueField="IDOsoba" OnSelectedIndexChanged="ddlCashier_SelectedIndexChanged" DataSourceID="dsBlagajnice" TabIndex="3">
                                         <asp:ListItem Selected="True" Value="0">--Izaberite--</asp:ListItem>
                                         </asp:DropDownList>                      
-                                        <asp:SqlDataSource ID="dsBlagajnice" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT IDOsoba, PunoIme FROM blVMoguciBlagajniciZaZaduzivanje"></asp:SqlDataSource>
+                                        <asp:SqlDataSource ID="dsBlagajnice" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSConnectionString %>" SelectCommand="SELECT IDOsoba, PunoIme FROM blVMoguciBlagajniciZaZaduzivanje"></asp:SqlDataSource>
                                     </div>
                                     <div class="col-12 col-lg-5 mb-3 mb-lg-0">
                                         <asp:CustomValidator runat="server" id="cvCashier" controltovalidate="ddlCashier" errormessage="" OnServerValidate="CvCashier_ServerValidate" CssClass="submit-customValidator" Display="Dynamic" ForeColor="Red" ValidateEmptyText="true" ValidationGroup="AddCustomValidatorToGroupZaduzenja"/>
@@ -217,7 +217,7 @@
                                         <PagerStyle BackColor="#CCCCCC" BorderColor="#999999" ForeColor="#333333" HorizontalAlign="Center" VerticalAlign="Middle" />
                                         <RowStyle BackColor="Silver" BorderColor="Black" BorderWidth="1px" Font-Bold="False" Font-Names="Arial" ForeColor="Black" HorizontalAlign="Center" />
                                     </asp:GridView>
-                                    <asp:SqlDataSource ID="dsGridView" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT TOP (100) PERCENT IDStavkaBlagajnickogIzvestaja, TipStavkeBlagajnickogIzvestaja, Datum, Iznos, KadaJeUpisano, Storno FROM blVPregledUpisanihZaduzenja WHERE (PunoIme = @punoime) ORDER BY KadaJeUpisano DESC" DeleteCommand="blSpPonistavanjeZaduzenjaBlagajnika" DeleteCommandType="StoredProcedure">
+                                    <asp:SqlDataSource ID="dsGridView" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSConnectionString %>" SelectCommand="SELECT TOP (100) PERCENT IDStavkaBlagajnickogIzvestaja, TipStavkeBlagajnickogIzvestaja, Datum, Iznos, KadaJeUpisano, Storno FROM blVPregledUpisanihZaduzenja WHERE (PunoIme = @punoime) ORDER BY KadaJeUpisano DESC" DeleteCommand="blSpPonistavanjeZaduzenjaBlagajnika" DeleteCommandType="StoredProcedure">
                                         <DeleteParameters>
                                             <asp:Parameter Name="IDStavkaBlagajnickogIzvestaja" Type="Int32" />
                                         </DeleteParameters>
@@ -243,7 +243,7 @@
                                         <PagerStyle BackColor="#CCCCCC" BorderColor="#999999" ForeColor="#333333" HorizontalAlign="Center" VerticalAlign="Middle" />
                                         <RowStyle BackColor="Silver" BorderColor="Black" BorderWidth="1px" Font-Bold="False" Font-Names="Arial" ForeColor="Black" HorizontalAlign="Center" />
                                     </asp:GridView>
-                                    <asp:SqlDataSource ID="dsGridView2" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSPISConnectionString %>" SelectCommand="SELECT TOP (100) PERCENT IDStavkaBlagajnickogIzvestaja, PunoIme, TipStavkeBlagajnickogIzvestaja, Datum, Iznos, KadaJeUpisano, Storno FROM dbo.blVPregledUpisanihZaduzenja ORDER BY KadaJeUpisano DESC" 
+                                    <asp:SqlDataSource ID="dsGridView2" runat="server" ConnectionString="<%$ ConnectionStrings:SCNSConnectionString %>" SelectCommand="SELECT TOP (100) PERCENT IDStavkaBlagajnickogIzvestaja, PunoIme, TipStavkeBlagajnickogIzvestaja, Datum, Iznos, KadaJeUpisano, Storno FROM dbo.blVPregledUpisanihZaduzenja ORDER BY KadaJeUpisano DESC" 
                                         FilterExpression="PunoIme LIKE '%{0}%'" DeleteCommand="blSpPonistavanjeZaduzenjaBlagajnika" DeleteCommandType="StoredProcedure">
                                         <DeleteParameters>
                                             <asp:Parameter Name="IDStavkaBlagajnickogIzvestaja" Type="Int32" />

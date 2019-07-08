@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+VisualStudioVersion = 15.0.28307.705
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SCNS-Git", ".", "{42B6E9EA-E237-4322-8B3E-FE7D2A5E848B}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -35,6 +35,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {3FCF20B8-3633-4881-9ED0-A06D2A26B7AF}
+		SolutionGuid = {FE9136CC-231A-45E1-92D4-F7BABD9BEACB}
 	EndGlobalSection
 EndGlobal

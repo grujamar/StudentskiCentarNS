@@ -12,7 +12,7 @@ using System.Web.UI.WebControls;
 /// </summary>
 public class Utility
 {
-    public string scnsconnectionstring = ConfigurationManager.ConnectionStrings["SCNSPISConnectionString"].ToString();
+    public string scnsconnectionstring = ConfigurationManager.ConnectionStrings["SCNSConnectionString"].ToString();
     //Lofg4Net declare log variable
     private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
